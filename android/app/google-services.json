@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "530170957810",
+    "firebase_url": "https://sports-team-management-a244a.firebaseio.com",
+    "project_id": "sports-team-management-a244a",
+    "storage_bucket": "sports-team-management-a244a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:530170957810:android:e5398a18b2231d6a5a256b",
+        "android_client_info": {
+          "package_name": "com.example.sports_team_management"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "530170957810-8qm5d7adk3jvm0q2ab10jfsr99egdaf9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsOJ7w9pg2c1RDrzqDikov1EtJV3PrZLI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "530170957810-8qm5d7adk3jvm0q2ab10jfsr99egdaf9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
