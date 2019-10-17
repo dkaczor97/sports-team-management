@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sports_team_management/pages/events/events-page.dart';
+import 'package:sports_team_management/pages/home/home-page.dart';
 import 'package:sports_team_management/pages/root/root-page.dart';
 import 'package:sports_team_management/services/authentication/authentication.dart';
+import 'package:sports_team_management/routes/routes.dart';
 
 
 void main() => runApp(MyApp());
@@ -29,7 +32,11 @@ class MyApp extends StatelessWidget {
         // backgroundColor: Colors.black
         brightness: Brightness.dark
       ),
-      home: new RootPage(auth: new Authentication())
+      home: new RootPage(auth: new Authentication()),
+      routes: {
+        Routes.events: (context) => EventsPage(),
+        Routes.home: (context) => HomePage()
+      },
     ),
     );
   }
