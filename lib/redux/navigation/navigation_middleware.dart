@@ -23,3 +23,9 @@ _navigate(Store<AppState> store, action, NextDispatcher next){
     navigatorKey.currentState.pushNamed(routeName);
   next(action);
 }
+
+_navigateBack(Store<AppState> store, action, NextDispatcher next){
+  final routeName = (action as NavigatePushAction).routeName;
+    navigatorKey.currentState.pushNamed(routeName);
+  next(action);
+}

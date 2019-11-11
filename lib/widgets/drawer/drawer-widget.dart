@@ -1,4 +1,11 @@
+import 'dart:math';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
+import 'package:sports_team_management/redux/app/app_state.dart';
+import 'package:sports_team_management/redux/navigation/navigation_actions.dart';
 import 'package:sports_team_management/routes/routes.dart';
 import 'package:sports_team_management/services/authentication/base/base-authentication.dart';
 
@@ -13,34 +20,40 @@ class DrawerWidget extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          _createHeader(),
-          _createDrawerItem(icon: Icons.home, text: "Strona główna", onTap: ()=> Navigator.pushReplacementNamed(context, Routes.events, arguments: auth)),
-          _createDrawerItem(icon: Icons.calendar_today, text: "Kalendarz", onTap: ()=> Navigator.pushReplacementNamed(context, Routes.events, arguments: auth))
+          _createHeader(
+              StoreProvider.of<AppState>(context)),
+          _createDrawerItem(
+              icon: Icons.home,
+              text: "Strona główna",
+              onTap: () => StoreProvider.of<AppState>(context).dispatch(
+                  NavigatePushAction(Routes
+                      .events))), //Navigator.pushReplacementNamed(context, Routes.events, arguments: auth)),
+          _createDrawerItem(
+              icon: Icons.calendar_today,
+              text: "Kalendarz",
+              onTap: () => StoreProvider.of<AppState>(context).dispatch(
+                  NavigatePushAction(Routes
+                      .events))), //Navigator.pushReplacementNamed(context, Routes.events, arguments: auth))
         ],
       ),
     );
   }
 
-  Widget _createHeader() {
-    return FutureBuilder(
-      future: auth.getCurrentUser(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return UserAccountsDrawerHeader(
-            accountName: Text(snapshot.data.displayName ?? ""),
-            accountEmail: Text(snapshot.data.email ?? ""),
-            currentAccountPicture: CircleAvatar(
-              child: Text(
-                (snapshot.data.email ?? " ").substring(0, 1),
-                style: TextStyle(fontSize: 40.0),
-              ),
-            ),
-          );
-        }
-        else{
-          return CircularProgressIndicator();
-        }
-      },
+  Widget _createHeader(Store<AppState> store) {
+    return UserAccountsDrawerHeader(
+      accountName: Text(store.state.authState.currentUser.displayName ?? ""),
+      accountEmail: Text(store.state.authState.currentUser.email ?? ""),
+      currentAccountPicture: CircleAvatar(
+        child: Text(
+          (store.state.authState.currentUser.email ?? " ").substring(0, 1).toUpperCase(),
+          style: TextStyle(fontSize: 40.0),
+          
+        ),
+        
+      ),
+      onDetailsPressed: () => store.dispatch(
+                  NavigatePushAction(Routes
+                      .editUser)),
     );
   }
 

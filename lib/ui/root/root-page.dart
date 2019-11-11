@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sports_team_management/enums/authentication/auth-status.dart';
-import 'package:sports_team_management/pages/home/home-page.dart';
-import 'package:sports_team_management/pages/login-signup/login-signup-page.dart';
-import 'package:sports_team_management/pages/login-signup/login_screen.dart';
+import 'package:sports_team_management/ui/home/home-page.dart';
+import 'package:sports_team_management/ui/login-signup/login-signup-page.dart';
+import 'package:sports_team_management/ui/login-signup/login_screen.dart';
 import 'package:sports_team_management/services/authentication/base/base-authentication.dart';
 
 class RootPage extends StatefulWidget{

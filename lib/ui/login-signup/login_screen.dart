@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:sports_team_management/pages/login-signup/login-signup-page.dart';
+import 'package:sports_team_management/ui/login-signup/login-signup-page.dart';
 import 'package:sports_team_management/redux/app/app_state.dart';
 import 'package:sports_team_management/redux/auth/auth_actions.dart';
 import 'package:sports_team_management/redux/auth/auth_state.dart';
