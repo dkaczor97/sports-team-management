@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -25,15 +25,20 @@ dependencies:
   provider: ^3.1.0
   flutter_redux: ^0.5.3
   redux: ^3.0.0
-  redux_thunk: ^0.2.1 
-
+  #redux_thunk: ^0.2.1 
+  intl: ^0.16.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
+  datetime_picker_formfield: ^1.0.0-pre.5 
+  built_value: ^6.6.0
+  built_collection: ^4.2.2
 
 dev_dependencies:
   flutter_test:
-    sdk: flutter
+    sdk: flutter 
+  build_runner: ^1.5.2
+  built_value_generator: ^6.6.0
 
 
 # For information on the generic Dart part of this file, see the

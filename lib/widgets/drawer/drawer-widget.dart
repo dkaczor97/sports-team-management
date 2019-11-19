@@ -1,11 +1,7 @@
-import 'dart:math';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:sports_team_management/redux/app/app_state.dart';
-import 'package:sports_team_management/redux/navigation/navigation_actions.dart';
 import 'package:sports_team_management/routes/routes.dart';
 import 'package:sports_team_management/services/authentication/base/base-authentication.dart';
 
@@ -25,35 +21,39 @@ class DrawerWidget extends StatelessWidget {
           _createDrawerItem(
               icon: Icons.home,
               text: "Strona główna",
-              onTap: () => StoreProvider.of<AppState>(context).dispatch(
-                  NavigatePushAction(Routes
-                      .events))), //Navigator.pushReplacementNamed(context, Routes.events, arguments: auth)),
+              onTap: () {
+                //StoreProvider.of<AppState>(context).dispatch()
+                //Navigator.of(context).pushNamed(Routes.events);
+                }
+             ),
           _createDrawerItem(
               icon: Icons.calendar_today,
               text: "Kalendarz",
-              onTap: () => StoreProvider.of<AppState>(context).dispatch(
-                  NavigatePushAction(Routes
-                      .events))), //Navigator.pushReplacementNamed(context, Routes.events, arguments: auth))
+              onTap: (){
+                Navigator.of(context).pushNamed(Routes.events);
+              }
+              )
         ],
       ),
     );
   }
 
+
   Widget _createHeader(Store<AppState> store) {
     return UserAccountsDrawerHeader(
-      accountName: Text(store.state.authState.currentUser.displayName ?? ""),
-      accountEmail: Text(store.state.authState.currentUser.email ?? ""),
+      accountName: Text(store.state.user.name ?? ""),
+      accountEmail: Text(store.state.user.email ?? ""),
       currentAccountPicture: CircleAvatar(
         child: Text(
-          (store.state.authState.currentUser.email ?? " ").substring(0, 1).toUpperCase(),
+          (store.state.user.email ?? " ").substring(0, 1).toUpperCase(),
           style: TextStyle(fontSize: 40.0),
           
         ),
         
       ),
-      onDetailsPressed: () => store.dispatch(
-                  NavigatePushAction(Routes
-                      .editUser)),
+      // onDetailsPressed: () => store.dispatch(
+      //             NavigatePushAction(Routes
+      //                 .editUser)),
     );
   }
 

@@ -1,13 +1,13 @@
-class NavigatePopAction{
+// class NavigatePopAction{
 
-}
+// }
 
-class NavigatePushAction{
-  final String routeName;
-  NavigatePushAction(this.routeName);
-}
+// class NavigatePushAction{
+//   final String routeName;
+//   NavigatePushAction(this.routeName);
+// }
 
-class NavigateReplaceAction{
-  final String routeName;
-  NavigateReplaceAction(this.routeName);
-}
+// class NavigateReplaceAction{
+//   final String routeName;
+//   NavigateReplaceAction(this.routeName);
+// }

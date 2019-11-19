@@ -1,19 +1,16 @@
+
+import 'package:built_collection/built_collection.dart';
 import 'package:redux/redux.dart';
+import 'package:sports_team_management/redux/app/app_state.dart';
 import 'package:sports_team_management/redux/event/event_actions.dart';
 import 'package:sports_team_management/redux/event/event_state.dart';
 
-Reducer<EventState> eventReducer = combineReducers(
-  [
-    TypedReducer<EventState,LoadEvents>(loadEventsReducer),
-    TypedReducer<EventState,LoadEventsResult>(loadEventsResultReducer),
-  ]
-);
+final eventReducers = <AppState Function(AppState, dynamic)>[
+    TypedReducer<AppState,LoadEventsResult>(loadEventsResultReducer),
+  ];
 
-EventState loadEventsReducer(EventState eventState, LoadEvents action){
-  return eventState.copyWith();
-}
-
-EventState loadEventsResultReducer(EventState eventState, LoadEventsResult action){
-  return eventState.copyWith(list: action.events);
+AppState loadEventsResultReducer(AppState appState, LoadEventsResult action){
+  return appState.rebuild((state)=>
+   state..eventState.update((e) => e..events = ListBuilder(action.events)));
 }
 

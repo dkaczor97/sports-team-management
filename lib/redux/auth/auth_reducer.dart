@@ -1,22 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:redux/redux.dart';
+import 'package:sports_team_management/redux/app/app_state.dart';
 import 'package:sports_team_management/redux/auth/auth_actions.dart';
-import 'package:sports_team_management/redux/auth/auth_state.dart';
 
-Reducer<AuthState> authReducer = combineReducers([
-  TypedReducer<AuthState,UserLogin>(userLoginReducer),
-  TypedReducer<AuthState,UserLoginSuccess>(userLoginSuccessReducer),
-  TypedReducer<AuthState,UserLogout>(userLogoutReducer)
-]);
+final authReducers = <AppState Function(AppState, dynamic)>[
+  TypedReducer<AppState,OnAuthenticated>(_onAuthenticated),
+  TypedReducer<AppState,OnLogoutSuccess>(_onLogout)
+];
 
-AuthState userLoginReducer(AuthState authState, UserLogin action){
-  return authState.copyWith();
+AppState _onAuthenticated(AppState state, OnAuthenticated action){
+  return state.rebuild((a)=>a..user = action.user.toBuilder());
 }
 
-AuthState userLoginSuccessReducer(AuthState authState, UserLoginSuccess action){
-  return authState.copyWith(currrentUser: action.user);
-}
-
-AuthState userLogoutReducer(AuthState authState, UserLogout action){
-  return authState.copyWith(currrentUser: null);
+AppState _onLogout(AppState state, OnLogoutSuccess action){
+  return state.clear();
 }

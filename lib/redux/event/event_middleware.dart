@@ -11,18 +11,17 @@ List<Middleware<AppState>> createStoreEventsMiddleware(
   ];
 }
 
-Middleware<AppState> _loadEvents(EventRepository repository){
-  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next){
-    final action = dynamicAction as LoadEvents;
-    final AppState state = store.state;
-
-    if(state.isLoading){
-      next(action);
-      return;
-    }
-
-    repository.loadEvents().listen((events){
-      store.dispatch(LoadEventsResult(events));
-    });
+void Function(
+  Store<AppState> store,
+  LoadEvents action,
+  NextDispatcher next,
+) _loadEvents(
+  EventRepository repository,
+) {
+  return (store, action, next) async {
+    next(action);
+    
+    final events = await repository.loadEvents();
+    store.dispatch(LoadEventsResult(events));
   };
 }
