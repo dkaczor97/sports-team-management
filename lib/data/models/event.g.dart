@@ -22,11 +22,7 @@ class _$Event extends Event {
       (new EventBuilder()..update(updates)).build();
 
   _$Event._({this.id, this.name, this.date, this.description, this.location})
-      : super._() {
-    if (id == null) {
-      throw new BuiltValueNullFieldError('Event', 'id');
-    }
-  }
+      : super._();
 
   @override
   Event rebuild(void Function(EventBuilder) updates) =>

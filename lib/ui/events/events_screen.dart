@@ -16,7 +16,26 @@ class EventsScreen extends StatelessWidget{
       },
       converter: EventsScreenViewModel.fromStore,
       builder: (context, vm){
-        return EventList(events: vm.events.asList());
+        return DefaultTabController(
+          length: 2,
+          child: new Scaffold(
+            appBar: new AppBar(
+              actions: <Widget>[],
+              title: new TabBar(
+                tabs: <Widget>[
+                  new Tab(text: "Przyszłe",),
+                  new Tab(text: "Przeszłe",),
+                ],
+              ),
+            ),
+            body: new TabBarView(
+              children: <Widget>[
+                EventList(events: vm.events.where((i)=>i.date.toDate().isAfter(DateTime.now())).toList()),
+                EventList(events: vm.events.where((i)=> !i.date.toDate().isAfter(DateTime.now())).toList()),
+              ],
+            ),
+          ),
+        );
       },
     );
   }

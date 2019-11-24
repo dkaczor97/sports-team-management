@@ -42,9 +42,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:sports_team_management/data/models/event.dart';
 import 'package:sports_team_management/redux/app/app_state.dart';
 import 'package:sports_team_management/redux/auth/auth_actions.dart';
+import 'package:sports_team_management/redux/event/event_actions.dart';
 import 'package:sports_team_management/routes/routes.dart';
+import 'package:sports_team_management/ui/events/edit/event_edit.dart';
 import 'package:sports_team_management/ui/events/events_screen.dart';
 import 'package:sports_team_management/widgets/drawer/drawer-widget.dart';
 
@@ -58,6 +61,7 @@ class HomeScreen extends StatefulWidget{
 class _HomeScreenState extends State<HomeScreen>{
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   Widget _currentScreen = Scaffold();
+  Widget _currentFab = Container();
   @override
   Widget build(BuildContext context){
     return Stack(
@@ -76,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen>{
           ),
           drawer: _createDrawerWidget(context),
           body: _currentScreen,
+          floatingActionButton: _currentFab,
         ),
 
       ],
@@ -85,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen>{
   initState(){
     super.initState();
     _currentScreen = Text("init");
+    _currentFab = Container();
   }
 
   Widget _createDrawerWidget(BuildContext context){
@@ -101,8 +107,7 @@ class _HomeScreenState extends State<HomeScreen>{
                 setState(() {
                   _currentScreen = Text("Home");
                 });
-                //StoreProvider.of<AppState>(context).dispatch()
-                //Navigator.of(context).pushNamed(Routes.events);
+                Navigator.of(context).pop();
                 }
              ),
           _createDrawerItem(
@@ -111,8 +116,15 @@ class _HomeScreenState extends State<HomeScreen>{
               onTap: (){
                 setState(() {
                   _currentScreen = EventsScreen();
+                  _currentFab = FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed: (){
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>EventEdit(isNew: true, event: new Event(),)));
+                      StoreProvider.of<AppState>(context).dispatch(LoadEvents);
+                    },
+                  );
                 });
-                //Navigator.of(context).pushNamed(Routes.events);
+                Navigator.of(context).pop();
               }
               )
         ],

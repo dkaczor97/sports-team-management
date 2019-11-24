@@ -7,6 +7,7 @@ import 'package:sports_team_management/ui/user/edit/user_edit_vm.dart';
 
 class Routes{
   static const String events = EventsScreen.route;
+  static const String eventEdit  = '/event/edit';
   static const String home = '/home';
   // static const String editUser = UserEditScreen.route;
   static const String login = LoginScreen.route;

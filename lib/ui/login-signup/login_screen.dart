@@ -73,8 +73,8 @@ class _LoginFormState extends State<_LoginForm>{
 
     final _submitButton = new RaisedButton(
             elevation: 5.0,
-            // shape: new RoundedRectangleBorder(
-            //     borderRadius: new BorderRadius.circular(30.0)),
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(30.0)),
             color: Colors.black26,
             child: new Text(
               "Login",

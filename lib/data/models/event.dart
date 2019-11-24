@@ -9,6 +9,7 @@ part 'event.g.dart';
 
 abstract class Event implements Built<Event, EventBuilder> {
   // fields go here
+  @nullable
   String get id;
   @nullable
   String get name;

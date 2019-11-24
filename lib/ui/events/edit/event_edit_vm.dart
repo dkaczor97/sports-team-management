@@ -1,3 +1,29 @@
+library event_edit_vm;
+
+import 'dart:convert';
+
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
+import 'package:redux/redux.dart';
+import 'package:sports_team_management/data/models/attendance.dart';
+import 'package:sports_team_management/redux/app/app_state.dart';
+
+part 'event_edit_vm.g.dart';
+
+abstract class EventEditVM implements Built<EventEditVM, EventEditVMBuilder> {
+  // fields go here
+  Attendance get attendance;
+
+  EventEditVM._();
+
+  factory EventEditVM([updates(EventEditVMBuilder b)]) = _$EventEditVM;
+
+  static EventEditVM fromStore(Store<AppState> store){
+    return EventEditVM((e)=>e
+    ..attendance = store.state.eventState.userAttendance.toBuilder());
+  }
+}
 // import 'package:flutter/material.dart';
 // import 'package:flutter_redux/flutter_redux.dart';
 // import 'package:redux/redux.dart';
@@ -23,9 +49,13 @@
 //   }
 // }
 
+// import 'package:redux/redux.dart';
+// import 'package:sports_team_management/data/models/event.dart';
+// import 'package:sports_team_management/redux/app/app_state.dart';
+
 // class EventEditVM{
 //   EventEditVM({this.event});
-//   final EventEntity event;
+//   final Event event;
 
 //   static EventEditVM fromStore(Store<AppState> store){
 //     return EventEditVM(

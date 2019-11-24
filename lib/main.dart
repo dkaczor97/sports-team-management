@@ -6,12 +6,14 @@ import 'package:intl/date_symbol_data_local.dart';
 // import 'package:intl/date_symbol_data_http_request.dart';
 // import 'package:intl/intl.dart';
 import 'package:redux/redux.dart';
+import 'package:sports_team_management/data/models/event.dart';
 import 'package:sports_team_management/data/repositories/auth_repository.dart';
 import 'package:sports_team_management/redux/auth/auth_actions.dart';
 import 'package:sports_team_management/redux/event/event_actions.dart';
 import 'package:sports_team_management/redux/event/event_middleware.dart';
 import 'package:sports_team_management/redux/user/user_actions.dart';
 import 'package:sports_team_management/redux/user/user_middleware.dart';
+import 'package:sports_team_management/ui/events/edit/event_edit.dart';
 import 'package:sports_team_management/ui/events/events-screen.dart';
 import 'package:sports_team_management/ui/events/events_screen.dart';
 import 'package:sports_team_management/ui/home/home_screen.dart';
@@ -151,6 +153,9 @@ class _SportsManagementAppState extends State<SportsManagementApp>{
           },
           Routes.events: (context){
             return EventsScreen();
+          },
+          Routes.eventEdit:(context){
+            return EventEdit();
           }
         },
       ),

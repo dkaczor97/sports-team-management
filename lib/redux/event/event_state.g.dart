@@ -9,11 +9,13 @@ part of 'event_state.dart';
 class _$EventState extends EventState {
   @override
   final BuiltList<Event> events;
+  @override
+  final Attendance userAttendance;
 
   factory _$EventState([void Function(EventStateBuilder) updates]) =>
       (new EventStateBuilder()..update(updates)).build();
 
-  _$EventState._({this.events}) : super._() {
+  _$EventState._({this.events, this.userAttendance}) : super._() {
     if (events == null) {
       throw new BuiltValueNullFieldError('EventState', 'events');
     }
@@ -29,17 +31,21 @@ class _$EventState extends EventState {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is EventState && events == other.events;
+    return other is EventState &&
+        events == other.events &&
+        userAttendance == other.userAttendance;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, events.hashCode));
+    return $jf($jc($jc(0, events.hashCode), userAttendance.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('EventState')..add('events', events))
+    return (newBuiltValueToStringHelper('EventState')
+          ..add('events', events)
+          ..add('userAttendance', userAttendance))
         .toString();
   }
 }
@@ -51,11 +57,18 @@ class EventStateBuilder implements Builder<EventState, EventStateBuilder> {
   ListBuilder<Event> get events => _$this._events ??= new ListBuilder<Event>();
   set events(ListBuilder<Event> events) => _$this._events = events;
 
+  AttendanceBuilder _userAttendance;
+  AttendanceBuilder get userAttendance =>
+      _$this._userAttendance ??= new AttendanceBuilder();
+  set userAttendance(AttendanceBuilder userAttendance) =>
+      _$this._userAttendance = userAttendance;
+
   EventStateBuilder();
 
   EventStateBuilder get _$this {
     if (_$v != null) {
       _events = _$v.events?.toBuilder();
+      _userAttendance = _$v.userAttendance?.toBuilder();
       _$v = null;
     }
     return this;
@@ -78,12 +91,16 @@ class EventStateBuilder implements Builder<EventState, EventStateBuilder> {
   _$EventState build() {
     _$EventState _$result;
     try {
-      _$result = _$v ?? new _$EventState._(events: events.build());
+      _$result = _$v ??
+          new _$EventState._(
+              events: events.build(), userAttendance: _userAttendance?.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'events';
         events.build();
+        _$failedField = 'userAttendance';
+        _userAttendance?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'EventState', _$failedField, e.toString());
