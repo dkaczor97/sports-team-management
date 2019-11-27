@@ -1,0 +1,4 @@
+enum ScreenStatus{
+  VIEW,
+  EDIT
+}

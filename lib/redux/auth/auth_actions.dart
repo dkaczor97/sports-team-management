@@ -14,7 +14,6 @@ class UserLoginSuccess{
   final FirebaseUser user;
 }
 
-//------------- poprawione
 class VerifyAuthenticationState{}
 
 @immutable
@@ -59,4 +58,19 @@ class OnLogoutFail {
   String toString() {
     return "OnLogoutFail{There was an error logging in: $error}";
   }
+}
+
+class EditUser{
+  final User user;
+  final bool isCurrentUser;
+  EditUser({this.user, this.isCurrentUser});
+}
+
+class LoadUsers{
+
+}
+
+class LoadUsersResult{
+  final List<User> users;
+  LoadUsersResult({this.users});
 }

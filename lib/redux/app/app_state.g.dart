@@ -11,13 +11,19 @@ class _$AppState extends AppState {
   final User user;
   @override
   final EventState eventState;
+  @override
+  final AdministrationState administrationState;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
 
-  _$AppState._({this.user, this.eventState}) : super._() {
+  _$AppState._({this.user, this.eventState, this.administrationState})
+      : super._() {
     if (eventState == null) {
       throw new BuiltValueNullFieldError('AppState', 'eventState');
+    }
+    if (administrationState == null) {
+      throw new BuiltValueNullFieldError('AppState', 'administrationState');
     }
   }
 
@@ -33,19 +39,22 @@ class _$AppState extends AppState {
     if (identical(other, this)) return true;
     return other is AppState &&
         user == other.user &&
-        eventState == other.eventState;
+        eventState == other.eventState &&
+        administrationState == other.administrationState;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, user.hashCode), eventState.hashCode));
+    return $jf($jc($jc($jc(0, user.hashCode), eventState.hashCode),
+        administrationState.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('AppState')
           ..add('user', user)
-          ..add('eventState', eventState))
+          ..add('eventState', eventState)
+          ..add('administrationState', administrationState))
         .toString();
   }
 }
@@ -63,12 +72,19 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   set eventState(EventStateBuilder eventState) =>
       _$this._eventState = eventState;
 
+  AdministrationStateBuilder _administrationState;
+  AdministrationStateBuilder get administrationState =>
+      _$this._administrationState ??= new AdministrationStateBuilder();
+  set administrationState(AdministrationStateBuilder administrationState) =>
+      _$this._administrationState = administrationState;
+
   AppStateBuilder();
 
   AppStateBuilder get _$this {
     if (_$v != null) {
       _user = _$v.user?.toBuilder();
       _eventState = _$v.eventState?.toBuilder();
+      _administrationState = _$v.administrationState?.toBuilder();
       _$v = null;
     }
     return this;
@@ -93,7 +109,9 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
     try {
       _$result = _$v ??
           new _$AppState._(
-              user: _user?.build(), eventState: eventState.build());
+              user: _user?.build(),
+              eventState: eventState.build(),
+              administrationState: administrationState.build());
     } catch (_) {
       String _$failedField;
       try {
@@ -101,6 +119,8 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
         _user?.build();
         _$failedField = 'eventState';
         eventState.build();
+        _$failedField = 'administrationState';
+        administrationState.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AppState', _$failedField, e.toString());

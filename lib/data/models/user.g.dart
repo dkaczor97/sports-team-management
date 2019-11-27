@@ -15,11 +15,14 @@ class _$User extends User {
   final String name;
   @override
   final int jerseyNumber;
+  @override
+  final String role;
 
   factory _$User([void Function(UserBuilder) updates]) =>
       (new UserBuilder()..update(updates)).build();
 
-  _$User._({this.uid, this.email, this.name, this.jerseyNumber}) : super._() {
+  _$User._({this.uid, this.email, this.name, this.jerseyNumber, this.role})
+      : super._() {
     if (uid == null) {
       throw new BuiltValueNullFieldError('User', 'uid');
     }
@@ -42,14 +45,16 @@ class _$User extends User {
         uid == other.uid &&
         email == other.email &&
         name == other.name &&
-        jerseyNumber == other.jerseyNumber;
+        jerseyNumber == other.jerseyNumber &&
+        role == other.role;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, uid.hashCode), email.hashCode), name.hashCode),
-        jerseyNumber.hashCode));
+        $jc($jc($jc($jc(0, uid.hashCode), email.hashCode), name.hashCode),
+            jerseyNumber.hashCode),
+        role.hashCode));
   }
 
   @override
@@ -58,7 +63,8 @@ class _$User extends User {
           ..add('uid', uid)
           ..add('email', email)
           ..add('name', name)
-          ..add('jerseyNumber', jerseyNumber))
+          ..add('jerseyNumber', jerseyNumber)
+          ..add('role', role))
         .toString();
   }
 }
@@ -82,6 +88,10 @@ class UserBuilder implements Builder<User, UserBuilder> {
   int get jerseyNumber => _$this._jerseyNumber;
   set jerseyNumber(int jerseyNumber) => _$this._jerseyNumber = jerseyNumber;
 
+  String _role;
+  String get role => _$this._role;
+  set role(String role) => _$this._role = role;
+
   UserBuilder();
 
   UserBuilder get _$this {
@@ -90,6 +100,7 @@ class UserBuilder implements Builder<User, UserBuilder> {
       _email = _$v.email;
       _name = _$v.name;
       _jerseyNumber = _$v.jerseyNumber;
+      _role = _$v.role;
       _$v = null;
     }
     return this;
@@ -112,7 +123,11 @@ class UserBuilder implements Builder<User, UserBuilder> {
   _$User build() {
     final _$result = _$v ??
         new _$User._(
-            uid: uid, email: email, name: name, jerseyNumber: jerseyNumber);
+            uid: uid,
+            email: email,
+            name: name,
+            jerseyNumber: jerseyNumber,
+            role: role);
     replace(_$result);
     return _$result;
   }

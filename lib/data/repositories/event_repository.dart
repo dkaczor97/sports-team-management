@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sports_team_management/data/firestore_path.dart';
 import 'package:sports_team_management/data/models/attendance.dart';
@@ -25,18 +26,22 @@ static const String path = 'events';
       .collection(FirestorePaths.PATH_EVENTS)
       .orderBy(EVENT_DATE, descending: true)
       .getDocuments();
-    return snapshot.documents.map((d)=>_eventFromDoc(d)).toList();
-    // return firestore.collection(path).snapshots().map((snapshot){
-    //   return snapshot.documents.map((event){
-    //     return EventEntity(
-    //       id: event.documentID,
-    //       date: event[EventFields.date],
-    //       name: event[EventFields.name],
-    //       description: event[EventFields.description],
-    //       location: event[EventFields.location]
-    //     );
-    //   }).toList();
-    // });
+    final events = snapshot.documents.map((d)=>_eventFromDoc(d)).toList();
+    final eventsToReturn = List<Event>();
+    for (var event in events) {
+      final attendance = await getEventAttendance(event.id);
+      eventsToReturn.add(event.rebuild((e)=>e..attendance = ListBuilder<Attendance>(attendance)));
+    }
+    return eventsToReturn;
+  }
+
+  Future<List<Attendance>> getEventAttendance(String eventId) async{
+    final eventAttendance = await firestore
+      .document(FirestorePaths.eventPath(eventId))
+      .collection(FirestorePaths.PATH_ATTENDANTS)
+      .getDocuments();
+      
+    return eventAttendance.documents.map((d)=>_attendanceFromDoc(d)).toList();
   }
 
   Future<void> addEvent(Event event) async{
@@ -83,6 +88,7 @@ static const String path = 'events';
 
 
   static Event _eventFromDoc(DocumentSnapshot doc){
+
     return Event((event)=>event
       ..name = doc[EVENT_NAME]
       ..date = doc[EVENT_DATE]

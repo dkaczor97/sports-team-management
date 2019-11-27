@@ -15,6 +15,9 @@ abstract class User implements Built<User, UserBuilder> {
   @nullable
   int get jerseyNumber;
 
+  @nullable
+  String get role;
+
   User._();
 
   factory User([updates(UserBuilder b)]) = _$User;

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sports_team_management/data/models/event.dart';
-import 'package:sports_team_management/data/models/event_model.dart';
 import 'package:sports_team_management/ui/events/edit/event_edit.dart';
 
 class EventListItem extends StatelessWidget {

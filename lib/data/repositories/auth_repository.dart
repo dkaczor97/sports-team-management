@@ -8,7 +8,7 @@ class AuthRepository{
   static const UID = "uid";
   static const NAME = "name";
   static const JERSEYNUMBER = "jerseyNumber";
-
+  static const ROLE = "role";
   final FirebaseAuth _auth;
   final Firestore _firestore;
 
@@ -54,11 +54,24 @@ class AuthRepository{
     return user;
   }
 
+  Future<void> editUser(User user) async{
+    await _firestore.document(FirestorePaths.userPath(user.uid)).updateData(toMap(user));
+  }
+
+  Future<List<User>> loadUsers() async{
+    final snapshot = await _firestore
+    .collection(FirestorePaths.PATH_USERS)
+    .getDocuments();
+    return snapshot.documents.map((u)=>fromDoc(u)).toList();
+  }
+
   static toMap(User user) {
     return {
       UID: user.uid,
       NAME: user.name,
       EMAIL: user.email,
+      JERSEYNUMBER: user.jerseyNumber,
+      ROLE: user.role
     };
   }
 
@@ -68,6 +81,7 @@ class AuthRepository{
       ..name = document[NAME]
       ..email = document[EMAIL]
       ..jerseyNumber = document[JERSEYNUMBER]
+      ..role = document[ROLE]
     );
   }
 

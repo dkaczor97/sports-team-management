@@ -6,14 +6,16 @@ import 'package:intl/intl.dart';
 import 'package:redux/redux.dart';
 import 'package:sports_team_management/data/models/event.dart';
 import 'package:sports_team_management/enums/attendance/attendance_status.dart';
+import 'package:sports_team_management/enums/role/roles.dart';
 import 'package:sports_team_management/redux/app/app_state.dart';
 import 'package:sports_team_management/redux/event/event_actions.dart';
+import 'package:sports_team_management/ui/enums/screen_state.dart';
+import 'package:sports_team_management/ui/events/attendance/attendance_list.dart';
 import 'package:sports_team_management/ui/events/edit/event_edit_vm.dart';
 
 class EventEdit extends StatefulWidget {
   final Event event;
   final bool isNew;
-  final bool isReadOnly = true;
   EventEdit({this.event, this.isNew});
 
   @override
@@ -26,14 +28,20 @@ class _EventEditState extends State<EventEdit> {
   final _locationFieldController = TextEditingController();
   final _dateFieldController = TextEditingController();
 
+  ScreenStatus _status;
   @override
   void initState() {
     super.initState();
+
     if (!widget.isNew) {
+      _status = ScreenStatus.VIEW;
       _nameFieldController.text = widget.event.name;
       _descriptionFieldController.text = widget.event.description;
       _locationFieldController.text = widget.event.location;
       _dateFieldController.text = widget.event.date.toDate().toString();
+    }
+    else{
+      _status = ScreenStatus.EDIT;
     }
   }
 
@@ -46,12 +54,30 @@ class _EventEditState extends State<EventEdit> {
         },
         converter: EventEditVM.fromStore,
         builder: (context, vm) {
-          return new Scaffold(
-            appBar: new AppBar(
-              title: new Text("Wydarzenie"),
-            ),
-            body: Stack(
-              children: <Widget>[showForm(vm)],
+          return DefaultTabController(
+            length: 2,
+            child: new Scaffold(
+              appBar: new AppBar(
+                title: new Text("Wydarzenie"),
+                bottom: new TabBar(
+                  tabs: <Widget>[
+                    new Tab(
+                      text: "Szczegóły",
+                    ),
+                    new Tab(
+                      text: "Zapisani",
+                    )
+                  ],
+                ),
+              ),
+              body: new TabBarView(
+                children: <Widget>[
+                  showForm(vm),
+                  AttendanceList(
+                    attendanceList: widget.event.attendance.toList(),
+                  )
+                ],
+              ),
             ),
           );
         });
@@ -69,18 +95,28 @@ class _EventEditState extends State<EventEdit> {
             showEventLocationInput(),
             showEventDateInput(),
             showAttendanceStatus(vm),
-            showButton()
+            _showButton()
           ],
         ),
       ),
     );
   }
+  Widget _showButton(){
+    final userRole = StoreProvider.of<AppState>(context).state.user.role;
+    if(userRole == Roles.admin || userRole == Roles.coach){
+     return _status == ScreenStatus.EDIT ? showSaveButton() : showEditButton();
 
+    }
+    else{
+      return Container();
+    }
+
+  }
   Widget showEventNameInput() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
       child: new TextFormField(
-        enabled: !widget.isReadOnly,
+        enabled: _status == ScreenStatus.EDIT,
         controller: _nameFieldController,
         maxLines: 1,
         keyboardType: TextInputType.text,
@@ -95,7 +131,7 @@ class _EventEditState extends State<EventEdit> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
       child: new TextFormField(
-        enabled: !widget.isReadOnly,
+        enabled: _status == ScreenStatus.EDIT,
         controller: _descriptionFieldController,
         maxLines: 2,
         keyboardType: TextInputType.text,
@@ -110,7 +146,7 @@ class _EventEditState extends State<EventEdit> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
       child: new TextFormField(
-        enabled: !widget.isReadOnly,
+        enabled: _status == ScreenStatus.EDIT,
         controller: _locationFieldController,
         maxLines: 1,
         keyboardType: TextInputType.text,
@@ -122,7 +158,7 @@ class _EventEditState extends State<EventEdit> {
   }
 
   Widget showAttendanceStatus(EventEditVM vm) {
-    if (vm.attendance == null) return Container();
+    if (vm.attendance == null || _status == ScreenStatus.EDIT) return Container();
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
       child: new Row(
@@ -188,7 +224,8 @@ class _EventEditState extends State<EventEdit> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
       child: DateTimeField(
-        enabled: !widget.isReadOnly,
+        enabled: _status == ScreenStatus.EDIT,
+        resetIcon: null,
         controller: _dateFieldController,
         readOnly: true,
         decoration: new InputDecoration(
@@ -213,7 +250,7 @@ class _EventEditState extends State<EventEdit> {
     );
   }
 
-  Widget showButton() {
+  Widget showSaveButton() {
     return new Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: SizedBox(
@@ -252,4 +289,28 @@ class _EventEditState extends State<EventEdit> {
       ),
     );
   }
+
+    Widget showEditButton() {
+    return new Padding(
+      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+      child: SizedBox(
+        height: 40.0,
+        child: new RaisedButton(
+            elevation: 5.0,
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(30.0)),
+            color: Colors.black26,
+            child: new Text(
+              "Edytuj",
+              style: new TextStyle(fontSize: 20.0, color: Colors.white),
+            ),
+            onPressed: () {
+              setState(() {
+                _status = ScreenStatus.EDIT;
+              });
+            }),
+      ),
+    );
+  }
+
 }

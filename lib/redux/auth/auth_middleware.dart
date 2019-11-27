@@ -13,6 +13,8 @@ List<Middleware<AppState>> createAuthMiddleware(
     TypedMiddleware<AppState, VerifyAuthenticationState>(_verifyAuthState(authRepository, navigatorKey)),
     TypedMiddleware<AppState, UserLogin>(_authLogin(authRepository, navigatorKey)),
     TypedMiddleware<AppState, UserLogout>(_authLogout(authRepository,navigatorKey)),
+    TypedMiddleware<AppState, EditUser>(_editUser(authRepository)),
+    TypedMiddleware<AppState, LoadUsers>(_loadUsers(authRepository))
   ];
 }
 
@@ -36,6 +38,42 @@ List<Middleware<AppState>> createAuthMiddleware(
 //     next(dynamicAction);
 //   };
 // }
+void Function(
+  Store<AppState> store,
+  LoadUsers action,
+  NextDispatcher next,
+) _loadUsers(
+  AuthRepository repository,
+) {
+  return (store, action, next) async {
+    next(action);
+    
+    await repository.loadUsers().then((result){
+      store.dispatch(LoadUsersResult(users: result));
+    });
+  };
+}
+
+void Function(
+  Store<AppState> store,
+  EditUser action,
+  NextDispatcher next,
+) _editUser(
+  AuthRepository repository,
+) {
+  return (store, action, next) async {
+    next(action);
+    
+    await repository.editUser(action.user).then((result){
+      if(action.isCurrentUser){
+        store.dispatch(VerifyAuthenticationState());
+      }
+      else{
+        store.dispatch(LoadUsers());
+      }
+    });
+  };
+}
 
 void Function(Store<AppState> store, VerifyAuthenticationState action,
         NextDispatcher next)
