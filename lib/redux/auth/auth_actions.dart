@@ -38,6 +38,17 @@ class UserLogin{
   final String password;
 }
 
+class UserSignup{
+  UserSignup({
+    this.email,
+    this.password,
+    Completer completer,
+  }) : completer = completer ?? Completer();
+  final Completer completer;
+  final String email;
+  final String password;
+}
+
 class UserLogout{}
 
 class OnLogoutSuccess{

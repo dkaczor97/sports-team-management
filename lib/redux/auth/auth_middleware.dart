@@ -14,7 +14,8 @@ List<Middleware<AppState>> createAuthMiddleware(
     TypedMiddleware<AppState, UserLogin>(_authLogin(authRepository, navigatorKey)),
     TypedMiddleware<AppState, UserLogout>(_authLogout(authRepository,navigatorKey)),
     TypedMiddleware<AppState, EditUser>(_editUser(authRepository)),
-    TypedMiddleware<AppState, LoadUsers>(_loadUsers(authRepository))
+    TypedMiddleware<AppState, LoadUsers>(_loadUsers(authRepository)),
+    TypedMiddleware<AppState, UserSignup>(_authSignup(authRepository, navigatorKey))
   ];
 }
 
@@ -116,6 +117,28 @@ void Function(
 
 void Function(
   Store<AppState> store,
+  UserSignup action,
+  NextDispatcher next,
+) _authSignup(
+  AuthRepository authRepository,
+  GlobalKey<NavigatorState> navigatorKey,
+) {
+  return (store, action, next) async {
+    next(action);
+    try {
+      final user = await authRepository.signUp(action.email, action.password);
+      store.dispatch(OnAuthenticated(user: user));
+
+      await navigatorKey.currentState.pushReplacementNamed(Routes.home);
+      action.completer.complete();
+    } catch (e) {
+      action.completer.completeError(e);
+    }
+  };
+}
+
+void Function(
+  Store<AppState> store,
   dynamic action,
   NextDispatcher next,
 ) _authLogout(
@@ -127,6 +150,7 @@ void Function(
     try {
       await authRepository.logout();
       store.dispatch(OnLogoutSuccess());
+      await navigatorKey.currentState.pushReplacementNamed(Routes.login);
     } catch (e) {
       store.dispatch(OnLogoutFail(e));
     }

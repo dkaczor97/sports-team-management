@@ -11,7 +11,8 @@ List<Middleware<AppState>> createStoreEventsMiddleware(
     TypedMiddleware<AppState, AddEvent>(_addEvent(repository)),
     TypedMiddleware<AppState, EditEvent>(_editEvent(repository)),
     TypedMiddleware<AppState, LoadUserAttendance>(_loadUserAttendance(repository)),
-    TypedMiddleware<AppState, SaveAttendance>(_saveAttendance(repository))
+    TypedMiddleware<AppState, SaveAttendance>(_saveAttendance(repository)),
+    TypedMiddleware<AppState, RemoveEvent>(_removeEvent(repository))
   ];
 }
 
@@ -73,6 +74,22 @@ void Function(
     next(action);
     
     await repository.addEvent(action.event).then((result){
+      store.dispatch(LoadEvents());
+    });
+  };
+}
+
+void Function(
+  Store<AppState> store,
+  RemoveEvent action,
+  NextDispatcher next,
+) _removeEvent(
+  EventRepository repository,
+) {
+  return (store, action, next) async {
+    next(action);
+    
+    await repository.removeEvent(action.eventId).then((result){
       store.dispatch(LoadEvents());
     });
   };

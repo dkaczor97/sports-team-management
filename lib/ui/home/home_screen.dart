@@ -64,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   Widget _currentScreen = Scaffold();
   Widget _currentFab = Container();
+  String _appBarText = "Sport Team Managament";
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -71,13 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Scaffold(
           key: _scaffoldKey,
           appBar: AppBar(
-            title: new Text("Home"),
-            // actions: <Widget>[
-            //   new FlatButton(
-            //     child: new Text('Logout'),
-            //     onPressed: ()=>StoreProvider.of<AppState>(context).dispatch(UserLogout()),
-            //   )
-            // ],
+            title: new Text(_appBarText),
           ),
           drawer: _createDrawerWidget(context),
           body: _currentScreen,
@@ -92,6 +87,11 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _currentScreen = Text("init");
     _currentFab = Container();
+    _appBarText = "Sport Team Managament";
+  }
+
+  Widget _createHomeScreen(){
+
   }
 
   Widget _createDrawerWidget(BuildContext context) {
@@ -107,6 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 setState(() {
                   _currentScreen = Text("Home");
                   _currentFab = Container();
+                  _appBarText = "Strona główna";
                 });
                 Navigator.of(context).pop();
               }),
@@ -115,6 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
               text: "Kalendarz",
               onTap: () {
                 setState(() {
+                  _appBarText = "Wydarzenia";
                   _currentScreen = EventsScreen();
                   final userRole =
                       StoreProvider.of<AppState>(context).state.user.role;
@@ -141,6 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   text: "Administracja",
                   onTap: () {
                     setState(() {
+                      _appBarText = "Administracja";
                       _currentScreen = AdministrationScreen();
                       _currentFab = Container();
                     });

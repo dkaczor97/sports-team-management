@@ -86,6 +86,10 @@ static const String path = 'events';
     }
   }
 
+  Future<void> removeEvent(String eventId) async{
+    await firestore.document(FirestorePaths.eventPath(eventId)).delete();
+  }
+
 
   static Event _eventFromDoc(DocumentSnapshot doc){
 

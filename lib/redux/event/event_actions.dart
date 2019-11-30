@@ -37,6 +37,11 @@ class SaveAttendance{
   final Attendance attendance;
   SaveAttendance({this.eventId, this.attendance});
 }
+
+class RemoveEvent{
+  final String eventId;
+  RemoveEvent({this.eventId});
+}
 // class ViewEvent{
 //   final EventEntity event;
 //   ViewEvent({this.event});

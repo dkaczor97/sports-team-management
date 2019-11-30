@@ -39,8 +39,7 @@ class _EventEditState extends State<EventEdit> {
       _descriptionFieldController.text = widget.event.description;
       _locationFieldController.text = widget.event.location;
       _dateFieldController.text = widget.event.date.toDate().toString();
-    }
-    else{
+    } else {
       _status = ScreenStatus.EDIT;
     }
   }
@@ -71,16 +70,21 @@ class _EventEditState extends State<EventEdit> {
                 ),
               ),
               body: new TabBarView(
-                children: <Widget>[
-                  showForm(vm),
-                  AttendanceList(
-                    attendanceList: widget.event.attendance.toList(),
-                  )
-                ],
+                children: <Widget>[showForm(vm), showAttendanceList()],
               ),
             ),
           );
         });
+  }
+
+  Widget showAttendanceList() {
+    if (!widget.isNew) {
+      return AttendanceList(
+        attendanceList: widget.event.attendance.toList(),
+      );
+    } else {
+      return Container();
+    }
   }
 
   Widget showForm(EventEditVM vm) {
@@ -95,23 +99,32 @@ class _EventEditState extends State<EventEdit> {
             showEventLocationInput(),
             showEventDateInput(),
             showAttendanceStatus(vm),
-            _showButton()
+            _showButton(),
+            _showRemoveButton()
           ],
         ),
       ),
     );
   }
-  Widget _showButton(){
-    final userRole = StoreProvider.of<AppState>(context).state.user.role;
-    if(userRole == Roles.admin || userRole == Roles.coach){
-     return _status == ScreenStatus.EDIT ? showSaveButton() : showEditButton();
 
-    }
-    else{
+  Widget _showButton() {
+    final userRole = StoreProvider.of<AppState>(context).state.user.role;
+    if (userRole == Roles.admin || userRole == Roles.coach) {
+      return _status == ScreenStatus.EDIT ? showSaveButton() : showEditButton();
+    } else {
       return Container();
     }
-
   }
+
+  Widget _showRemoveButton() {
+    final userRole = StoreProvider.of<AppState>(context).state.user.role;
+    if (userRole == Roles.admin || userRole == Roles.coach) {
+      return _status == ScreenStatus.EDIT ? Container() : showRemoveButton();
+    } else {
+      return Container();
+    }
+  }
+
   Widget showEventNameInput() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
@@ -158,7 +171,8 @@ class _EventEditState extends State<EventEdit> {
   }
 
   Widget showAttendanceStatus(EventEditVM vm) {
-    if (vm.attendance == null || _status == ScreenStatus.EDIT) return Container();
+    if (vm.attendance == null || _status == ScreenStatus.EDIT)
+      return Container();
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
       child: new Row(
@@ -290,7 +304,7 @@ class _EventEditState extends State<EventEdit> {
     );
   }
 
-    Widget showEditButton() {
+  Widget showEditButton() {
     return new Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: SizedBox(
@@ -313,4 +327,26 @@ class _EventEditState extends State<EventEdit> {
     );
   }
 
+  Widget showRemoveButton() {
+    return new Padding(
+      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+      child: SizedBox(
+        height: 40.0,
+        child: new RaisedButton(
+            elevation: 5.0,
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(30.0)),
+            color: Colors.black26,
+            child: new Text(
+              "Usuń",
+              style: new TextStyle(fontSize: 20.0, color: Colors.white),
+            ),
+            onPressed: () {
+              StoreProvider.of<AppState>(context)
+                  .dispatch(RemoveEvent(eventId: widget.event.id));
+              Navigator.of(context).pop();
+            }),
+      ),
+    );
+  }
 }

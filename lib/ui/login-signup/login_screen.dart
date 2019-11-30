@@ -44,7 +44,14 @@ class _LoginFormState extends State<_LoginForm>{
   final _formKey = GlobalKey<FormState>();
   final _emailTextFieldController = TextEditingController();
   final _passwordTextFieldController = TextEditingController();
+  bool _isRegisterForm;
   
+  @override
+  void initState() {
+    super.initState();
+    _isRegisterForm = false;
+  }
+
   @override
   void dispose(){
     _emailTextFieldController.dispose();
@@ -54,7 +61,23 @@ class _LoginFormState extends State<_LoginForm>{
 
     @override
     Widget build(BuildContext context){
-    final submitCallback = (){
+    final loginCallback = (){
+      if(_isRegisterForm){
+        final registerAction = UserSignup(
+          email: _emailTextFieldController.text,
+          password: _passwordTextFieldController.text
+        );
+        StoreProvider.of<AppState>(context).dispatch(registerAction);
+                Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text("Trwa rejestracja..."),));
+
+        registerAction.completer.future.catchError((error){
+          Scaffold.of(context).hideCurrentSnackBar();
+          Scaffold.of(context).showSnackBar(SnackBar(content: Text(error.code.toString(),)));
+        });
+
+      }
+      else{
       if(_formKey.currentState.validate()){
         final loginAction = UserLogin(
           email: _emailTextFieldController.text,
@@ -69,6 +92,8 @@ class _LoginFormState extends State<_LoginForm>{
           Scaffold.of(context).showSnackBar(SnackBar(content: Text(error.code.toString(),)));
         });
       }
+
+      }
     };
 
     final _submitButton = new RaisedButton(
@@ -77,12 +102,26 @@ class _LoginFormState extends State<_LoginForm>{
                 borderRadius: new BorderRadius.circular(30.0)),
             color: Colors.black26,
             child: new Text(
-              "Login",
+              _isRegisterForm ? "Zarejestruj" : "Zaloguj się",
               style: new TextStyle(fontSize: 20.0, color: Colors.white),
             ),
             onPressed:
-                submitCallback //vm.onLoginPressed(email: _email,password: _password),
+                loginCallback //vm.onLoginPressed(email: _email,password: _password),
             );
+
+    final _changeStatusButton = new FlatButton(
+      child: Text(
+        _isRegisterForm ? "Powrót": "Załóż konto",
+        style: new TextStyle(fontSize: 20.0, color: Colors.white),
+      ),
+      onPressed:(){
+        setState(() {
+       _isRegisterForm = !_isRegisterForm;          
+        });
+      }
+        
+
+    );
 
     final _emailInput = new TextFormField(
         maxLines: 1,
@@ -108,7 +147,8 @@ class _LoginFormState extends State<_LoginForm>{
           children: <Widget>[
             _emailInput,
             _passwordInput,
-            _submitButton
+            _submitButton,
+            _changeStatusButton
           ],
         ),
       );

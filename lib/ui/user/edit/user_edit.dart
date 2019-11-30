@@ -52,6 +52,7 @@ class _UserEditState extends State<UserEdit> {
             showJerseyNumberInput(),
             showRoleInput(),
             showPrimaryButton(),
+            showLogoutButton()
           ],
         ),
       ),
@@ -150,5 +151,19 @@ class _UserEditState extends State<UserEdit> {
         ),
       ),
     );
+  }
+
+  Widget showLogoutButton() {
+    if(widget.isCurrentUser){
+      return FlatButton(
+        child: Text("Wyloguj"),
+        onPressed: (){
+          StoreProvider.of<AppState>(context).dispatch(UserLogout());
+        },
+      );
+    }
+    else{
+      return Container();
+    }
   }
 }

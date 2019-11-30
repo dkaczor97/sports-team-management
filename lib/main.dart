@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -30,85 +32,26 @@ import 'data/repositories/user_repository.dart';
 
 //void main() => runApp(MyApp());
 void main(){
-  // final store = Store<AppState>(
-  //   appReducer,
-  //   initialState: AppState(
-  //     isLoading: false
-  //   ),
-  //   middleware: []
-  //     ..addAll(createAuthMiddleware(AuthRepository(auth: FirebaseAuth.instance)))
-  //     ..addAll(createNavigationMiddleware())
-  //     ..addAll(createStoreEventsMiddleware(EventRepository(Firestore.instance)))
-  //     ..addAll(createStoreUserMiddleware(UserRepository(Firestore.instance)))
-  // );
   initializeDateFormatting("pl_PL", null).then((param){
     runApp(SportsManagementApp());
   });
-  // runApp(MyApp(store: store));
 }
 
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
 
 class SportsManagementApp extends StatefulWidget {
-  //final Store<AppState> store;
   const SportsManagementApp({Key key}) : super(key: key);
 
   @override 
   _SportsManagementAppState createState()=> _SportsManagementAppState();
 
-  // This widget is the root of your application.
-// MaterialPageRoute _getRoute(RouteSettings settings){
-//   switch(settings.name){
-//     case Routes.home:
-//       return MainRoute(HomePage(), settings: settings);
-//     case Routes.events:
-//     store.dispatch(LoadEvents());
-//       return MainRoute(EventsScreen(), settings: settings);
-//     case Routes.editUser:
-//     store.dispatch(LoadUserData());
-//     return MainRoute(UserEditScreen(), settings: settings);
-//     default:
-//       return MainRoute(HomePage(), settings: settings);
-//   }
-// }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return StoreProvider(
-//       store: store,
-//       child:  MaterialApp(
-//         navigatorKey: navigatorKey,
-//         navigatorObservers: [routeObserver],
-//       title: 'Flutter Demo',
-//       theme: ThemeData(
-//         brightness: Brightness.dark
-//       ),
-//       home: new RootPage(auth: new Authentication()),
-//       onGenerateRoute: (RouteSettings settings) => _getRoute(settings),
-//     ),
-//     );
-//   }
 }
-
-// class MainRoute<T> extends MaterialPageRoute<T> {
-//   MainRoute(Widget widget, {RouteSettings settings})
-//       : super(
-//             builder: (_) => RouteAwareWidget(child: widget),
-//             settings: settings);
-
-//   @override
-//   Widget buildTransitions(BuildContext context, Animation<double> animation,
-//       Animation<double> secondaryAnimation, Widget child) {
-//     if (settings.isInitialRoute) return child;
-//     // Fades between routes. (If you don't want any animation,
-//     // just return child.)
-//     return FadeTransition(opacity: animation, child: child);
-//   }
-// }
 
 class _SportsManagementAppState extends State<SportsManagementApp>{
   Store<AppState> store;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
   @override
   void initState(){
     super.initState();
@@ -117,12 +60,40 @@ class _SportsManagementAppState extends State<SportsManagementApp>{
       initialState: AppState.init(),
       middleware: 
         createAuthMiddleware(AuthRepository(FirebaseAuth.instance, Firestore.instance), navigatorKey)
-        // ..addAll(createNavigationMiddleware())
          ..addAll(createStoreEventsMiddleware(EventRepository(Firestore.instance)))
-        // ..addAll(createStoreUserMiddleware(UserRepository(Firestore.instance)))
-
     );
     store.dispatch(VerifyAuthenticationState());
+          _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async{
+          print("onMessage: $message");
+          showDialog(
+            context: context,
+            builder: (context)=>AlertDialog(
+              content: ListTile(
+                title: Text(message['notification']['title']),
+                subtitle: Text(message['notification']['body']),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Ok"),
+                  onPressed: () => Navigator.of(context).pop(),
+                )
+              ],
+            )
+          );
+        },
+        onLaunch: (Map<String, dynamic> message) async{
+          print("onLaunch: $message");
+        },
+        onResume: (Map<String, dynamic> message) async{
+          print("onResume: $message");
+        },
+      );
+      _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true)
+      );
+
+
   }
 
     @override
@@ -156,5 +127,51 @@ class _SportsManagementAppState extends State<SportsManagementApp>{
         },
       ),
     );
+  }
+}
+
+
+class MessageHandler extends StatefulWidget {
+  @override
+  _MessageHandlerState createState() => _MessageHandlerState();
+}
+
+class _MessageHandlerState extends State<MessageHandler> {
+  @override
+  Widget build(BuildContext context) {
+    FirebaseMessaging _fcm = FirebaseMessaging();
+    return Container(
+      
+    );
+    @override
+    void initState(){
+      super.initState();
+      _fcm.configure(
+        onMessage: (Map<String, dynamic> message) async{
+          print("onMessage: $message");
+          showDialog(
+            context: context,
+            builder: (context)=>AlertDialog(
+              content: ListTile(
+                title: Text(message['notification']['title']),
+                subtitle: Text(message['notification']['body']),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Ok"),
+                  onPressed: () => Navigator.of(context).pop(),
+                )
+              ],
+            )
+          );
+        },
+        onLaunch: (Map<String, dynamic> message) async{
+          print("onLaunch: $message");
+        },
+        onResume: (Map<String, dynamic> message) async{
+          print("onResume: $message");
+        },
+      );
+    }
   }
 }

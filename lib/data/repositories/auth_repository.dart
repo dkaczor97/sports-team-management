@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sports_team_management/data/firestore_path.dart';
 import 'package:sports_team_management/data/models/user.dart';
+import 'package:sports_team_management/enums/role/roles.dart';
 
 class AuthRepository{
   static const EMAIL = "email";
@@ -20,6 +21,11 @@ class AuthRepository{
   ) async{
     
     final result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+    return await _fromFirebaseUser(result.user);
+  }
+
+  Future<User> signUp(String email, String password) async{
+    final result = await _auth.createUserWithEmailAndPassword(email: email,password: password);
     return await _fromFirebaseUser(result.user);
   }
 
@@ -46,6 +52,8 @@ class AuthRepository{
         ..uid = firebaseUser.uid
         ..email = firebaseUser.email
         ..name = firebaseUser.email
+        ..role = Roles.player
+        ..jerseyNumber = 0
       );
       await documentReference.setData(toMap(user));
     } else{
