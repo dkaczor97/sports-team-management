@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sports_team_management/data/models/user.dart';
-import 'package:sports_team_management/data/models/user_model.dart';
 import 'package:sports_team_management/enums/role/roles.dart';
 import 'package:sports_team_management/redux/app/app_state.dart';
 import 'package:sports_team_management/redux/auth/auth_actions.dart';

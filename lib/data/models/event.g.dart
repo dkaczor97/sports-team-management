@@ -19,6 +19,8 @@ class _$Event extends Event {
   final String location;
   @override
   final BuiltList<Attendance> attendance;
+  @override
+  final BuiltList<Section> sections;
 
   factory _$Event([void Function(EventBuilder) updates]) =>
       (new EventBuilder()..update(updates)).build();
@@ -29,7 +31,8 @@ class _$Event extends Event {
       this.date,
       this.description,
       this.location,
-      this.attendance})
+      this.attendance,
+      this.sections})
       : super._();
 
   @override
@@ -48,17 +51,20 @@ class _$Event extends Event {
         date == other.date &&
         description == other.description &&
         location == other.location &&
-        attendance == other.attendance;
+        attendance == other.attendance &&
+        sections == other.sections;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc($jc(0, id.hashCode), name.hashCode), date.hashCode),
-                description.hashCode),
-            location.hashCode),
-        attendance.hashCode));
+            $jc(
+                $jc($jc($jc($jc(0, id.hashCode), name.hashCode), date.hashCode),
+                    description.hashCode),
+                location.hashCode),
+            attendance.hashCode),
+        sections.hashCode));
   }
 
   @override
@@ -69,7 +75,8 @@ class _$Event extends Event {
           ..add('date', date)
           ..add('description', description)
           ..add('location', location)
-          ..add('attendance', attendance))
+          ..add('attendance', attendance)
+          ..add('sections', sections))
         .toString();
   }
 }
@@ -103,6 +110,11 @@ class EventBuilder implements Builder<Event, EventBuilder> {
   set attendance(ListBuilder<Attendance> attendance) =>
       _$this._attendance = attendance;
 
+  ListBuilder<Section> _sections;
+  ListBuilder<Section> get sections =>
+      _$this._sections ??= new ListBuilder<Section>();
+  set sections(ListBuilder<Section> sections) => _$this._sections = sections;
+
   EventBuilder();
 
   EventBuilder get _$this {
@@ -113,6 +125,7 @@ class EventBuilder implements Builder<Event, EventBuilder> {
       _description = _$v.description;
       _location = _$v.location;
       _attendance = _$v.attendance?.toBuilder();
+      _sections = _$v.sections?.toBuilder();
       _$v = null;
     }
     return this;
@@ -142,12 +155,15 @@ class EventBuilder implements Builder<Event, EventBuilder> {
               date: date,
               description: description,
               location: location,
-              attendance: _attendance?.build());
+              attendance: _attendance?.build(),
+              sections: _sections?.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'attendance';
         _attendance?.build();
+        _$failedField = 'sections';
+        _sections?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'Event', _$failedField, e.toString());

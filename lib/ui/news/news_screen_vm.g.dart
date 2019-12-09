@@ -1,35 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of news_state;
+part of news_screen_vm;
 
 // **************************************************************************
 // BuiltValueGenerator
 // **************************************************************************
 
-class _$NewsState extends NewsState {
+class _$NewsScreenVM extends NewsScreenVM {
   @override
   final BuiltList<News> newsList;
 
-  factory _$NewsState([void Function(NewsStateBuilder) updates]) =>
-      (new NewsStateBuilder()..update(updates)).build();
+  factory _$NewsScreenVM([void Function(NewsScreenVMBuilder) updates]) =>
+      (new NewsScreenVMBuilder()..update(updates)).build();
 
-  _$NewsState._({this.newsList}) : super._() {
+  _$NewsScreenVM._({this.newsList}) : super._() {
     if (newsList == null) {
-      throw new BuiltValueNullFieldError('NewsState', 'newsList');
+      throw new BuiltValueNullFieldError('NewsScreenVM', 'newsList');
     }
   }
 
   @override
-  NewsState rebuild(void Function(NewsStateBuilder) updates) =>
+  NewsScreenVM rebuild(void Function(NewsScreenVMBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  NewsStateBuilder toBuilder() => new NewsStateBuilder()..replace(this);
+  NewsScreenVMBuilder toBuilder() => new NewsScreenVMBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is NewsState && newsList == other.newsList;
+    return other is NewsScreenVM && newsList == other.newsList;
   }
 
   @override
@@ -39,22 +39,24 @@ class _$NewsState extends NewsState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('NewsState')..add('newsList', newsList))
+    return (newBuiltValueToStringHelper('NewsScreenVM')
+          ..add('newsList', newsList))
         .toString();
   }
 }
 
-class NewsStateBuilder implements Builder<NewsState, NewsStateBuilder> {
-  _$NewsState _$v;
+class NewsScreenVMBuilder
+    implements Builder<NewsScreenVM, NewsScreenVMBuilder> {
+  _$NewsScreenVM _$v;
 
   ListBuilder<News> _newsList;
   ListBuilder<News> get newsList =>
       _$this._newsList ??= new ListBuilder<News>();
   set newsList(ListBuilder<News> newsList) => _$this._newsList = newsList;
 
-  NewsStateBuilder();
+  NewsScreenVMBuilder();
 
-  NewsStateBuilder get _$this {
+  NewsScreenVMBuilder get _$this {
     if (_$v != null) {
       _newsList = _$v.newsList?.toBuilder();
       _$v = null;
@@ -63,23 +65,23 @@ class NewsStateBuilder implements Builder<NewsState, NewsStateBuilder> {
   }
 
   @override
-  void replace(NewsState other) {
+  void replace(NewsScreenVM other) {
     if (other == null) {
       throw new ArgumentError.notNull('other');
     }
-    _$v = other as _$NewsState;
+    _$v = other as _$NewsScreenVM;
   }
 
   @override
-  void update(void Function(NewsStateBuilder) updates) {
+  void update(void Function(NewsScreenVMBuilder) updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$NewsState build() {
-    _$NewsState _$result;
+  _$NewsScreenVM build() {
+    _$NewsScreenVM _$result;
     try {
-      _$result = _$v ?? new _$NewsState._(newsList: newsList.build());
+      _$result = _$v ?? new _$NewsScreenVM._(newsList: newsList.build());
     } catch (_) {
       String _$failedField;
       try {
@@ -87,7 +89,7 @@ class NewsStateBuilder implements Builder<NewsState, NewsStateBuilder> {
         newsList.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'NewsState', _$failedField, e.toString());
+            'NewsScreenVM', _$failedField, e.toString());
       }
       rethrow;
     }

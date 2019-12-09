@@ -13,17 +13,23 @@ class _$AppState extends AppState {
   final EventState eventState;
   @override
   final AdministrationState administrationState;
+  @override
+  final NewsState newsState;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
 
-  _$AppState._({this.user, this.eventState, this.administrationState})
+  _$AppState._(
+      {this.user, this.eventState, this.administrationState, this.newsState})
       : super._() {
     if (eventState == null) {
       throw new BuiltValueNullFieldError('AppState', 'eventState');
     }
     if (administrationState == null) {
       throw new BuiltValueNullFieldError('AppState', 'administrationState');
+    }
+    if (newsState == null) {
+      throw new BuiltValueNullFieldError('AppState', 'newsState');
     }
   }
 
@@ -40,13 +46,16 @@ class _$AppState extends AppState {
     return other is AppState &&
         user == other.user &&
         eventState == other.eventState &&
-        administrationState == other.administrationState;
+        administrationState == other.administrationState &&
+        newsState == other.newsState;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc($jc(0, user.hashCode), eventState.hashCode),
-        administrationState.hashCode));
+    return $jf($jc(
+        $jc($jc($jc(0, user.hashCode), eventState.hashCode),
+            administrationState.hashCode),
+        newsState.hashCode));
   }
 
   @override
@@ -54,7 +63,8 @@ class _$AppState extends AppState {
     return (newBuiltValueToStringHelper('AppState')
           ..add('user', user)
           ..add('eventState', eventState)
-          ..add('administrationState', administrationState))
+          ..add('administrationState', administrationState)
+          ..add('newsState', newsState))
         .toString();
   }
 }
@@ -78,6 +88,11 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   set administrationState(AdministrationStateBuilder administrationState) =>
       _$this._administrationState = administrationState;
 
+  NewsStateBuilder _newsState;
+  NewsStateBuilder get newsState =>
+      _$this._newsState ??= new NewsStateBuilder();
+  set newsState(NewsStateBuilder newsState) => _$this._newsState = newsState;
+
   AppStateBuilder();
 
   AppStateBuilder get _$this {
@@ -85,6 +100,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _user = _$v.user?.toBuilder();
       _eventState = _$v.eventState?.toBuilder();
       _administrationState = _$v.administrationState?.toBuilder();
+      _newsState = _$v.newsState?.toBuilder();
       _$v = null;
     }
     return this;
@@ -111,7 +127,8 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
           new _$AppState._(
               user: _user?.build(),
               eventState: eventState.build(),
-              administrationState: administrationState.build());
+              administrationState: administrationState.build(),
+              newsState: newsState.build());
     } catch (_) {
       String _$failedField;
       try {
@@ -121,6 +138,8 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
         eventState.build();
         _$failedField = 'administrationState';
         administrationState.build();
+        _$failedField = 'newsState';
+        newsState.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AppState', _$failedField, e.toString());

@@ -1,6 +1,7 @@
 
 import 'package:sports_team_management/data/models/attendance.dart';
 import 'package:sports_team_management/data/models/event.dart';
+import 'package:sports_team_management/data/models/section.dart';
 
 class LoadEvents{
 
@@ -41,6 +42,18 @@ class SaveAttendance{
 class RemoveEvent{
   final String eventId;
   RemoveEvent({this.eventId});
+}
+
+class AddSectionToEvent{
+  final String eventId;
+  final Section section;
+  AddSectionToEvent({this.eventId, this.section});
+}
+
+class DeleteSectionFromEvent{
+  final String eventId;
+  final String sectionId;
+  DeleteSectionFromEvent({this.eventId, this.sectionId});
 }
 // class ViewEvent{
 //   final EventEntity event;

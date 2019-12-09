@@ -5,6 +5,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
 import 'package:redux/redux.dart';
 import 'package:sports_team_management/data/models/event.dart';
+import 'package:sports_team_management/data/models/section.dart';
 import 'package:sports_team_management/enums/attendance/attendance_status.dart';
 import 'package:sports_team_management/enums/role/roles.dart';
 import 'package:sports_team_management/redux/app/app_state.dart';
@@ -12,6 +13,7 @@ import 'package:sports_team_management/redux/event/event_actions.dart';
 import 'package:sports_team_management/ui/enums/screen_state.dart';
 import 'package:sports_team_management/ui/events/attendance/attendance_list.dart';
 import 'package:sports_team_management/ui/events/edit/event_edit_vm.dart';
+import 'package:sports_team_management/ui/multiselect/multiselect_dialog.dart';
 
 class EventEdit extends StatefulWidget {
   final Event event;
@@ -100,7 +102,8 @@ class _EventEditState extends State<EventEdit> {
             showEventDateInput(),
             showAttendanceStatus(vm),
             _showButton(),
-            _showRemoveButton()
+            _showRemoveButton(),
+            showSectionsButton(vm)
           ],
         ),
       ),
@@ -262,6 +265,70 @@ class _EventEditState extends State<EventEdit> {
         },
       ),
     );
+  }
+  Widget showSectionsButton(EventEditVM vm) {
+    return new Padding(
+      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+      child: SizedBox(
+        height: 40.0,
+        child: new RaisedButton(
+            elevation: 5.0,
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(30.0)),
+            color: Colors.black26,
+            child: new Text(
+              "Sekcje",
+              style: new TextStyle(fontSize: 20.0, color: Colors.white),
+            ),
+            onPressed: () async {
+              editSections(vm);
+            }),
+      ),
+    );
+  }
+
+  void editSections(EventEditVM vm) async {
+    final items = vm.sections.map((section) {
+      return MultiselectDialogItem<Section>(value: section, label: section.name);
+    }).toList();
+
+    final selectedValues = await showDialog<List<Section>>(
+        context: context,
+        builder: (BuildContext context) {
+          return MultiselectDialog<Section>(
+            items: items,
+            initialSelectedValues: vm.sections
+                .where((test) =>
+                    widget.event.sections.any((s) => s.id == test.id)).toList(),
+          );
+        });
+    if(selectedValues == null){
+      return;
+    }
+    final List<Section> newElements = new List<Section>();
+    final List<Section> elementsToRemove = new List<Section>();
+    for (var s in widget.event.sections) {
+      if (!selectedValues.any((test) => test.id == s.id)) {
+        elementsToRemove.add(s); //odznaczony
+      } else {
+        //nic sie nie zmieniło, można zostawić
+        selectedValues.removeWhere((test) => test.id == s.id);
+      }
+    }
+    for (Section selectedSection in selectedValues) {
+      //tu już są same nowe
+      newElements.add(new Section((s) => s
+        ..id = selectedSection.id
+        ..name = selectedSection.name
+        ));
+    }
+    for (var item in newElements) {
+      StoreProvider.of<AppState>(context).dispatch(AddSectionToEvent(eventId: widget.event.id, section: item));
+    }
+    for (var item in elementsToRemove) {
+      StoreProvider.of<AppState>(context).dispatch(DeleteSectionFromEvent(eventId: widget.event.id, sectionId: item.id));
+    }
+    Navigator.of(context).pop();
   }
 
   Widget showSaveButton() {

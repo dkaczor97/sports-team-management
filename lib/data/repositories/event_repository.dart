@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sports_team_management/data/firestore_path.dart';
 import 'package:sports_team_management/data/models/attendance.dart';
 import 'package:sports_team_management/data/models/event.dart';
+import 'package:sports_team_management/data/models/section.dart';
+import 'package:sports_team_management/data/repositories/section_repository.dart';
 import 'package:sports_team_management/enums/attendance/attendance_status.dart';
 
 class EventRepository{
@@ -30,9 +32,32 @@ static const String path = 'events';
     final eventsToReturn = List<Event>();
     for (var event in events) {
       final attendance = await getEventAttendance(event.id);
-      eventsToReturn.add(event.rebuild((e)=>e..attendance = ListBuilder<Attendance>(attendance)));
+      final sections = await getEventSections(event.id);
+      eventsToReturn.add(event.rebuild((e)=>e..attendance = ListBuilder<Attendance>(attendance)..sections = ListBuilder<Section>(sections)));
     }
     return eventsToReturn;
+  }
+
+  Future<List<Section>> getEventSections(String eventId) async{
+    final eventSection = await firestore
+      .document(FirestorePaths.eventPath(eventId))
+      .collection(FirestorePaths.PATH_SECTIONS)
+      .getDocuments();
+
+      return eventSection.documents.map((d)=> sectionFromDoc(d)).toList();
+  }
+
+  Future<void> addSectionToEvent(String eventId, Section section) async {
+    return firestore.document(FirestorePaths.eventSectionPath(eventId, section.id)).setData(SectionRepository.sectionToMap(section));
+  }
+
+  Future<void> deleteSectionFromEvent(String eventId, String sectionId) async {
+    return firestore.document(FirestorePaths.eventSectionPath(eventId, sectionId)).delete();
+  }
+  static Section sectionFromDoc(DocumentSnapshot document){
+    return Section((s)=>s
+    ..id = document[SectionRepository.SECTION_ID]
+    ..name = document[SectionRepository.SECTION_NAME]);
   }
 
   Future<List<Attendance>> getEventAttendance(String eventId) async{

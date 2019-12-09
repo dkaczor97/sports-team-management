@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:redux/redux.dart';
 import 'package:sports_team_management/data/repositories/auth_repository.dart';
-import 'package:sports_team_management/data/repositories/user_repository.dart';
 import 'package:sports_team_management/redux/app/app_state.dart';
 import 'package:sports_team_management/redux/auth/auth_actions.dart';
 import 'package:sports_team_management/redux/navigation/navigation_actions.dart';

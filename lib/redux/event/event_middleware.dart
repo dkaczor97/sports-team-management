@@ -12,7 +12,9 @@ List<Middleware<AppState>> createStoreEventsMiddleware(
     TypedMiddleware<AppState, EditEvent>(_editEvent(repository)),
     TypedMiddleware<AppState, LoadUserAttendance>(_loadUserAttendance(repository)),
     TypedMiddleware<AppState, SaveAttendance>(_saveAttendance(repository)),
-    TypedMiddleware<AppState, RemoveEvent>(_removeEvent(repository))
+    TypedMiddleware<AppState, RemoveEvent>(_removeEvent(repository)),
+    TypedMiddleware<AppState, AddSectionToEvent>(_addSectionToEvent(repository)),
+    TypedMiddleware<AppState, DeleteSectionFromEvent>(_deleteSectionFromEvent(repository)),
   ];
 }
 
@@ -106,6 +108,38 @@ void Function(
     next(action);
     
     await repository.editEvent(action.event).then((result){
+      store.dispatch(LoadEvents());
+    });
+  };
+}
+
+void Function(
+  Store<AppState> store,
+  AddSectionToEvent action,
+  NextDispatcher next,
+) _addSectionToEvent(
+  EventRepository repository,
+) {
+  return (store, action, next) async {
+    next(action);
+    
+    await repository.addSectionToEvent(action.eventId, action.section).then((result){
+      store.dispatch(LoadEvents());
+    });
+  };
+}
+
+void Function(
+  Store<AppState> store,
+  DeleteSectionFromEvent action,
+  NextDispatcher next,
+) _deleteSectionFromEvent(
+  EventRepository repository,
+) {
+  return (store, action, next) async {
+    next(action);
+    
+    await repository.deleteSectionFromEvent(action.eventId, action.sectionId).then((result){
       store.dispatch(LoadEvents());
     });
   };

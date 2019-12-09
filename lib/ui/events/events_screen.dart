@@ -12,7 +12,7 @@ class EventsScreen extends StatelessWidget{
   Widget build(BuildContext context){
     return StoreConnector<AppState, EventsScreenViewModel>(
       onInit: (store){
-        store.dispatch(LoadEvents());
+        //store.dispatch(LoadEvents());
       },
       converter: EventsScreenViewModel.fromStore,
       builder: (context, vm){

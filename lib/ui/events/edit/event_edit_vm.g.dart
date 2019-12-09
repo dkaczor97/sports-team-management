@@ -9,13 +9,18 @@ part of event_edit_vm;
 class _$EventEditVM extends EventEditVM {
   @override
   final Attendance attendance;
+  @override
+  final BuiltList sections;
 
   factory _$EventEditVM([void Function(EventEditVMBuilder) updates]) =>
       (new EventEditVMBuilder()..update(updates)).build();
 
-  _$EventEditVM._({this.attendance}) : super._() {
+  _$EventEditVM._({this.attendance, this.sections}) : super._() {
     if (attendance == null) {
       throw new BuiltValueNullFieldError('EventEditVM', 'attendance');
+    }
+    if (sections == null) {
+      throw new BuiltValueNullFieldError('EventEditVM', 'sections');
     }
   }
 
@@ -29,18 +34,21 @@ class _$EventEditVM extends EventEditVM {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is EventEditVM && attendance == other.attendance;
+    return other is EventEditVM &&
+        attendance == other.attendance &&
+        sections == other.sections;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, attendance.hashCode));
+    return $jf($jc($jc(0, attendance.hashCode), sections.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('EventEditVM')
-          ..add('attendance', attendance))
+          ..add('attendance', attendance)
+          ..add('sections', sections))
         .toString();
   }
 }
@@ -54,11 +62,16 @@ class EventEditVMBuilder implements Builder<EventEditVM, EventEditVMBuilder> {
   set attendance(AttendanceBuilder attendance) =>
       _$this._attendance = attendance;
 
+  BuiltList _sections;
+  BuiltList get sections => _$this._sections;
+  set sections(BuiltList sections) => _$this._sections = sections;
+
   EventEditVMBuilder();
 
   EventEditVMBuilder get _$this {
     if (_$v != null) {
       _attendance = _$v.attendance?.toBuilder();
+      _sections = _$v.sections;
       _$v = null;
     }
     return this;
@@ -81,7 +94,9 @@ class EventEditVMBuilder implements Builder<EventEditVM, EventEditVMBuilder> {
   _$EventEditVM build() {
     _$EventEditVM _$result;
     try {
-      _$result = _$v ?? new _$EventEditVM._(attendance: attendance.build());
+      _$result = _$v ??
+          new _$EventEditVM._(
+              attendance: attendance.build(), sections: sections);
     } catch (_) {
       String _$failedField;
       try {

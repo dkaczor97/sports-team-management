@@ -9,14 +9,19 @@ part of administration_state;
 class _$AdministrationState extends AdministrationState {
   @override
   final BuiltList<User> users;
+  @override
+  final BuiltList<Section> sections;
 
   factory _$AdministrationState(
           [void Function(AdministrationStateBuilder) updates]) =>
       (new AdministrationStateBuilder()..update(updates)).build();
 
-  _$AdministrationState._({this.users}) : super._() {
+  _$AdministrationState._({this.users, this.sections}) : super._() {
     if (users == null) {
       throw new BuiltValueNullFieldError('AdministrationState', 'users');
+    }
+    if (sections == null) {
+      throw new BuiltValueNullFieldError('AdministrationState', 'sections');
     }
   }
 
@@ -32,18 +37,21 @@ class _$AdministrationState extends AdministrationState {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is AdministrationState && users == other.users;
+    return other is AdministrationState &&
+        users == other.users &&
+        sections == other.sections;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, users.hashCode));
+    return $jf($jc($jc(0, users.hashCode), sections.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('AdministrationState')
-          ..add('users', users))
+          ..add('users', users)
+          ..add('sections', sections))
         .toString();
   }
 }
@@ -56,11 +64,17 @@ class AdministrationStateBuilder
   ListBuilder<User> get users => _$this._users ??= new ListBuilder<User>();
   set users(ListBuilder<User> users) => _$this._users = users;
 
+  ListBuilder<Section> _sections;
+  ListBuilder<Section> get sections =>
+      _$this._sections ??= new ListBuilder<Section>();
+  set sections(ListBuilder<Section> sections) => _$this._sections = sections;
+
   AdministrationStateBuilder();
 
   AdministrationStateBuilder get _$this {
     if (_$v != null) {
       _users = _$v.users?.toBuilder();
+      _sections = _$v.sections?.toBuilder();
       _$v = null;
     }
     return this;
@@ -83,12 +97,16 @@ class AdministrationStateBuilder
   _$AdministrationState build() {
     _$AdministrationState _$result;
     try {
-      _$result = _$v ?? new _$AdministrationState._(users: users.build());
+      _$result = _$v ??
+          new _$AdministrationState._(
+              users: users.build(), sections: sections.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'users';
         users.build();
+        _$failedField = 'sections';
+        sections.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AdministrationState', _$failedField, e.toString());

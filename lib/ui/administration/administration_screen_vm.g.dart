@@ -9,14 +9,19 @@ part of administration_screen_vm;
 class _$AdministrationScreenVM extends AdministrationScreenVM {
   @override
   final BuiltList<User> users;
+  @override
+  final BuiltList<Section> sections;
 
   factory _$AdministrationScreenVM(
           [void Function(AdministrationScreenVMBuilder) updates]) =>
       (new AdministrationScreenVMBuilder()..update(updates)).build();
 
-  _$AdministrationScreenVM._({this.users}) : super._() {
+  _$AdministrationScreenVM._({this.users, this.sections}) : super._() {
     if (users == null) {
       throw new BuiltValueNullFieldError('AdministrationScreenVM', 'users');
+    }
+    if (sections == null) {
+      throw new BuiltValueNullFieldError('AdministrationScreenVM', 'sections');
     }
   }
 
@@ -32,18 +37,21 @@ class _$AdministrationScreenVM extends AdministrationScreenVM {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is AdministrationScreenVM && users == other.users;
+    return other is AdministrationScreenVM &&
+        users == other.users &&
+        sections == other.sections;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, users.hashCode));
+    return $jf($jc($jc(0, users.hashCode), sections.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('AdministrationScreenVM')
-          ..add('users', users))
+          ..add('users', users)
+          ..add('sections', sections))
         .toString();
   }
 }
@@ -56,11 +64,17 @@ class AdministrationScreenVMBuilder
   ListBuilder<User> get users => _$this._users ??= new ListBuilder<User>();
   set users(ListBuilder<User> users) => _$this._users = users;
 
+  ListBuilder<Section> _sections;
+  ListBuilder<Section> get sections =>
+      _$this._sections ??= new ListBuilder<Section>();
+  set sections(ListBuilder<Section> sections) => _$this._sections = sections;
+
   AdministrationScreenVMBuilder();
 
   AdministrationScreenVMBuilder get _$this {
     if (_$v != null) {
       _users = _$v.users?.toBuilder();
+      _sections = _$v.sections?.toBuilder();
       _$v = null;
     }
     return this;
@@ -83,12 +97,16 @@ class AdministrationScreenVMBuilder
   _$AdministrationScreenVM build() {
     _$AdministrationScreenVM _$result;
     try {
-      _$result = _$v ?? new _$AdministrationScreenVM._(users: users.build());
+      _$result = _$v ??
+          new _$AdministrationScreenVM._(
+              users: users.build(), sections: sections.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'users';
         users.build();
+        _$failedField = 'sections';
+        sections.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AdministrationScreenVM', _$failedField, e.toString());
