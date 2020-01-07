@@ -14,6 +14,8 @@ abstract class User implements Built<User, UserBuilder> {
   String get name;
   @nullable
   int get jerseyNumber;
+  @nullable
+  String get token;
 
   @nullable
   String get role;

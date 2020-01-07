@@ -16,7 +16,22 @@ class NewsListItem extends StatelessWidget {
           Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NewsEdit( news,  false)));
         },
         title: Text(news.title),
-        subtitle: Text(news.content),
+
+
+        subtitle: 
+        Container(
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(
+              color: Theme.of(context).accentColor
+              )
+            )
+          ),
+          padding: EdgeInsets.only(top: 5),
+          margin: EdgeInsets.only(top: 5),
+          child: Text(news.content),
+        )
+        
       ),
       
     );

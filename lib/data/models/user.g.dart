@@ -16,12 +16,20 @@ class _$User extends User {
   @override
   final int jerseyNumber;
   @override
+  final String token;
+  @override
   final String role;
 
   factory _$User([void Function(UserBuilder) updates]) =>
       (new UserBuilder()..update(updates)).build();
 
-  _$User._({this.uid, this.email, this.name, this.jerseyNumber, this.role})
+  _$User._(
+      {this.uid,
+      this.email,
+      this.name,
+      this.jerseyNumber,
+      this.token,
+      this.role})
       : super._() {
     if (uid == null) {
       throw new BuiltValueNullFieldError('User', 'uid');
@@ -46,14 +54,17 @@ class _$User extends User {
         email == other.email &&
         name == other.name &&
         jerseyNumber == other.jerseyNumber &&
+        token == other.token &&
         role == other.role;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc($jc(0, uid.hashCode), email.hashCode), name.hashCode),
-            jerseyNumber.hashCode),
+        $jc(
+            $jc($jc($jc($jc(0, uid.hashCode), email.hashCode), name.hashCode),
+                jerseyNumber.hashCode),
+            token.hashCode),
         role.hashCode));
   }
 
@@ -64,6 +75,7 @@ class _$User extends User {
           ..add('email', email)
           ..add('name', name)
           ..add('jerseyNumber', jerseyNumber)
+          ..add('token', token)
           ..add('role', role))
         .toString();
   }
@@ -88,6 +100,10 @@ class UserBuilder implements Builder<User, UserBuilder> {
   int get jerseyNumber => _$this._jerseyNumber;
   set jerseyNumber(int jerseyNumber) => _$this._jerseyNumber = jerseyNumber;
 
+  String _token;
+  String get token => _$this._token;
+  set token(String token) => _$this._token = token;
+
   String _role;
   String get role => _$this._role;
   set role(String role) => _$this._role = role;
@@ -100,6 +116,7 @@ class UserBuilder implements Builder<User, UserBuilder> {
       _email = _$v.email;
       _name = _$v.name;
       _jerseyNumber = _$v.jerseyNumber;
+      _token = _$v.token;
       _role = _$v.role;
       _$v = null;
     }
@@ -127,6 +144,7 @@ class UserBuilder implements Builder<User, UserBuilder> {
             email: email,
             name: name,
             jerseyNumber: jerseyNumber,
+            token: token,
             role: role);
     replace(_$result);
     return _$result;

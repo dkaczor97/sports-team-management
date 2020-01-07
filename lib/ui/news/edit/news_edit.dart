@@ -36,42 +36,37 @@ class _NewsEditState extends State<NewsEdit> {
     return StoreConnector(
       converter: NewsEditVM.fromStore,
       builder: (context,vm){
-        return DefaultTabController(
-          length: 2,
-          child: Scaffold(
+        return Scaffold(
             appBar: AppBar(
               title: Text("Ogłoszenie"),
-              bottom: TabBar(
-                tabs: <Widget>[
-                  Tab(text: "Szczegóły",),
-                  Tab(text: "Potwierdzenia",)
-                ],
-              ),
             ),
-            body: TabBarView(
-              children: <Widget>[
+            body: 
                 showForm(vm),
                 //Text("2"),
-                 showList()
-              ],
-            ),
-          ),
-        );
-      },
-    );
+
+            );
+      }
+          );
+
   }
 
   Widget showForm(NewsEditVM vm){
     return new Container(
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.fromLTRB(6,10,6,10),
       child: Form(
         child: ListView(
           shrinkWrap: true,
           children: <Widget>[
             showTitleInput(),
             showContentInput(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
             showSectionsButton(vm),
             showSaveButton(vm)
+
+              ],
+            )
           ],
         ),
       ),
@@ -79,17 +74,15 @@ class _NewsEditState extends State<NewsEdit> {
   }
 
   Widget showTitleInput(){
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-      child: new TextFormField(
+    return TextFormField(
         controller: _titleFieldController,
         maxLines: 1,
         keyboardType: TextInputType.text,
         autofocus: false,
         decoration: new InputDecoration(
-            labelText: 'Tytuł', hasFloatingPlaceholder: true),
-      ),
-    );
+            labelText: 'Tytuł', hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor, filled: true),
+      );
   }
 
   Widget showContentInput(){
@@ -101,30 +94,21 @@ class _NewsEditState extends State<NewsEdit> {
         keyboardType: TextInputType.text,
         autofocus: false,
         decoration: new InputDecoration(
-            labelText: 'Treść', hasFloatingPlaceholder: true),
+            labelText: 'Treść', hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor, filled: true),
       ),
     );
   }
 
   Widget showSectionsButton(NewsEditVM vm) {
-    return new Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: SizedBox(
-        height: 40.0,
-        child: new RaisedButton(
-            elevation: 5.0,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0)),
-            color: Colors.black26,
+    return new FlatButton(
+        textColor: Theme.of(context).buttonColor,
             child: new Text(
-              "Sekcje",
-              style: new TextStyle(fontSize: 20.0, color: Colors.white),
+              "Sekcje".toUpperCase(),
             ),
             onPressed: () async {
               editSections(vm);
-            }),
-      ),
-    );
+            });
   }
 
   void editSections(NewsEditVM vm) async {
@@ -175,24 +159,13 @@ class _NewsEditState extends State<NewsEdit> {
   }
 
   Widget showSaveButton(NewsEditVM vm) {
-    return new Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: SizedBox(
-        height: 40.0,
-        child: new RaisedButton(
-            elevation: 5.0,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0)),
-            color: Colors.black26,
+    return new RaisedButton(
             child: new Text(
-              "Zapisz",
-              style: new TextStyle(fontSize: 20.0, color: Colors.white),
+              "Zapisz".toUpperCase(),
             ),
             onPressed: () async {
               _save();
-            }),
-      ),
-    );
+            });
   }
 
   void _save(){
@@ -232,10 +205,4 @@ class _NewsEditState extends State<NewsEdit> {
               Navigator.of(context).pop();
 
   }
-
-
-  Widget showList(){
-    return Container();
-  }
-
 }

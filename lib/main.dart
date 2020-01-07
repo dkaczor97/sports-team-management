@@ -48,41 +48,13 @@ class _SportsManagementAppState extends State<SportsManagementApp> {
     store = Store<AppState>(appReducer,
         initialState: AppState.init(),
         middleware: 
-          createAuthMiddleware(AuthRepository(FirebaseAuth.instance, Firestore.instance), navigatorKey)
+          createAuthMiddleware(AuthRepository(FirebaseAuth.instance, Firestore.instance, _firebaseMessaging), navigatorKey)
           ..addAll(createStoreEventsMiddleware(EventRepository(Firestore.instance)))
           ..addAll(createSectionMiddleware(SectionRepository(Firestore.instance)))
           ..addAll(createNewsMiddleware(NewsRepository(Firestore.instance)))
           );
     store.dispatch(VerifyAuthenticationState());
     store.dispatch(LoadSections());
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  content: ListTile(
-                    title: Text(message['notification']['title']),
-                    subtitle: Text(message['notification']['body']),
-                  ),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text("Ok"),
-                      onPressed: () => Navigator.of(context).pop(),
-                    )
-                  ],
-                ));
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-      },
-    );
-    _firebaseMessaging.requestNotificationPermissions(
-        const IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.subscribeToTopic("Events");
   }
 
   @override
@@ -92,7 +64,8 @@ class _SportsManagementAppState extends State<SportsManagementApp> {
       child: MaterialApp(
         title: 'SportsManagementApp',
         navigatorKey: navigatorKey,
-        theme: ThemeData(brightness: Brightness.dark),
+        theme: ThemeData(brightness: Brightness.dark, buttonColor: Colors.teal),
+
         routes: {
           Routes.loading: (context) {
             return Scaffold(

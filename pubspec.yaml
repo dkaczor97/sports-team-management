@@ -35,6 +35,7 @@ dependencies:
   datetime_picker_formfield: ^1.0.0-pre.5 
   built_value: ^6.6.0
   built_collection: ^4.2.2
+  http: ^0.12.0+2
  
 dev_dependencies:
   flutter_test:

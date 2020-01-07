@@ -14,6 +14,8 @@ class UserListItem extends StatelessWidget {
             Navigator.of(context).push(MaterialPageRoute(builder: (context)=>UserEdit(user: user, isCurrentUser: false,)));
           },
       leading: CircleAvatar(
+        backgroundColor: Theme.of(context).buttonColor,
+        foregroundColor: Theme.of(context).textTheme.button.color,
         child: Text(user.jerseyNumber.toString() ?? user.name?.substring(0,1)?.toUpperCase()),
       ),
       title: Text(user.name),

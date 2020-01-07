@@ -168,7 +168,9 @@ if(_userRole != Roles.player){
         accountEmail:
             Text(StoreProvider.of<AppState>(context).state.user.email ?? ""),
         currentAccountPicture: CircleAvatar(
-          child: Text(
+          backgroundColor: Theme.of(context).buttonColor,
+          foregroundColor: Theme.of(context).textTheme.button.color,
+                    child: Text(
             (StoreProvider.of<AppState>(context).state.user.email ?? " ")
                 .substring(0, 1)
                 .toUpperCase(),
@@ -188,7 +190,17 @@ if(_userRole != Roles.player){
 
   Widget _createDrawerItem(
       {IconData icon, String text, GestureTapCallback onTap}) {
-    return ListTile(
+      return Container(
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: Theme.of(context).buttonColor
+            )
+          )
+        ),
+        margin: EdgeInsets.only(left: 16,right: 16),
+        child: 
+            ListTile(
       title: Row(
         children: <Widget>[
           Icon(icon),
@@ -199,6 +211,9 @@ if(_userRole != Roles.player){
         ],
       ),
       onTap: onTap,
-    );
+    )
+        ,
+      );
+
   }
 }

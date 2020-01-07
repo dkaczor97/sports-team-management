@@ -41,7 +41,7 @@ class _UserEditState extends State<UserEdit> {
 
   Widget showForm() {
     return new Container(
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.fromLTRB(6,10,6,10),
       child: new Form(
         child: new ListView(
           shrinkWrap: true,
@@ -50,8 +50,13 @@ class _UserEditState extends State<UserEdit> {
             showDisplayNameInput(),
             showJerseyNumberInput(),
             showRoleInput(),
-            showPrimaryButton(),
-            showLogoutButton()
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+            showLogoutButton(),
+                        showPrimaryButton(),
+
+            ],)
           ],
         ),
       ),
@@ -60,13 +65,14 @@ class _UserEditState extends State<UserEdit> {
 
   Widget showMailInput() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
       child: new TextFormField(
         enabled: false,
         maxLines: 1,
         autofocus: false,
         decoration: new InputDecoration(
-            labelText: 'e-mail', hasFloatingPlaceholder: true),
+            labelText: 'e-mail', hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor, filled: true),
         initialValue: widget.user.email,
       ),
     );
@@ -81,7 +87,8 @@ class _UserEditState extends State<UserEdit> {
         keyboardType: TextInputType.text,
         autofocus: false,
         decoration: new InputDecoration(
-            labelText: 'Imię i nazwisko', hasFloatingPlaceholder: true),
+            labelText: 'Imię i nazwisko', hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor, filled: true),
       ),
     );
   }
@@ -95,7 +102,8 @@ class _UserEditState extends State<UserEdit> {
         keyboardType: TextInputType.number,
         autofocus: false,
         decoration: new InputDecoration(
-            labelText: 'Numer koszulki', hasFloatingPlaceholder: true),
+            labelText: 'Numer koszulki', hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor, filled: true),
       ),
     );
   }
@@ -105,6 +113,9 @@ class _UserEditState extends State<UserEdit> {
       return Padding(
         padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
         child: DropdownButtonFormField(
+          decoration: new InputDecoration(
+            labelText: 'Rola', hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor, filled: true),
             value: userRole,
             items: <String>[
               Roles.admin,
@@ -125,18 +136,9 @@ class _UserEditState extends State<UserEdit> {
   }
 
   Widget showPrimaryButton() {
-    return new Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: SizedBox(
-        height: 40.0,
-        child: new RaisedButton(
-          elevation: 5.0,
-          shape: new RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(30.0)),
-          color: Colors.black26,
+    return RaisedButton(
           child: new Text(
-            "Zapisz",
-            style: new TextStyle(fontSize: 20.0, color: Colors.white),
+            "Zapisz".toUpperCase()
           ),
           onPressed: () {
             final userToUpdate = widget.user.rebuild((u) => u
@@ -147,15 +149,14 @@ class _UserEditState extends State<UserEdit> {
                 user: userToUpdate, isCurrentUser: widget.isCurrentUser));
             Navigator.of(context).pop();
           },
-        ),
-      ),
-    );
+        );
   }
 
   Widget showLogoutButton() {
     if(widget.isCurrentUser){
       return FlatButton(
-        child: Text("Wyloguj"),
+        textColor: Theme.of(context).buttonColor,
+        child: Text("Wyloguj".toUpperCase()),
         onPressed: (){
           StoreProvider.of<AppState>(context).dispatch(UserLogout());
         },

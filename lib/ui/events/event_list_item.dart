@@ -13,7 +13,19 @@ class EventListItem extends StatelessWidget {
           onTap: (){
             Navigator.of(context).push(MaterialPageRoute(builder: (context)=>EventEdit(isNew: false, event: event,)));
           },
-      leading: Column(
+      leading: 
+      Container(
+        decoration: 
+        BoxDecoration(
+          border: Border(
+            right: BorderSide(
+              color: Theme.of(context).accentColor
+            )
+          )
+        ),
+        padding: EdgeInsets.only(right: 10),
+        child: 
+              Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -21,21 +33,24 @@ class EventListItem extends StatelessWidget {
               DateFormat.EEEE("pl_PL")
                   .format(event.date.toDate())
                   .toUpperCase(),
-              style: TextStyle(fontSize: 9),
+              style: TextStyle(fontSize: 9, color: Theme.of(context).textTheme.caption.color),
             ),
             Text(
               event.date.toDate().day.toString(),
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600,),
             ),
             Text(
               DateFormat("MMM y", "pl_PL")
                   .format(event.date.toDate())
                   .toUpperCase(),
-              style: TextStyle(fontSize: 10),
+              style: TextStyle(fontSize: 10,color: Theme.of(context).textTheme.caption.color),
             )
           ]),
-      title: Text(event.name),
-      subtitle: Text(event.description),
+      ),
+
+      title: Text(event.name,maxLines: 1, ),
+      subtitle: Text(event.description,maxLines: 1,softWrap: true,),
+      
     ));
   }
 }

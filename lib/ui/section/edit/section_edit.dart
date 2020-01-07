@@ -63,16 +63,21 @@ class _SectionEditState extends State<SectionEdit> {
 
   Widget _showForm(SectionEditVM vm) {
     return new Container(
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.fromLTRB(6,10,6,10),
       child: new Form(
         child: new ListView(
           shrinkWrap: true,
           children: <Widget>[
             showNameInput(),
             _currentUserList != null ? _showList() : Container(),
-            _showRemoveButton(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
             showEditButton(vm),
+            _showRemoveButton(),
             showSaveButton()
+              ],
+            )
           ],
         ),
       ),
@@ -81,61 +86,46 @@ class _SectionEditState extends State<SectionEdit> {
 
   Widget showNameInput() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
       child: new TextFormField(
         controller: _nameFieldController,
         maxLines: 1,
         keyboardType: TextInputType.text,
         autofocus: false,
         decoration: new InputDecoration(
-            labelText: 'Nazwa', hasFloatingPlaceholder: true),
+            labelText: 'Nazwa', hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor, filled: true
+            ),
       ),
     );
   }
 
   Widget _showRemoveButton() {
-    return new Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: SizedBox(
-        height: 40.0,
-        child: new RaisedButton(
-            elevation: 5.0,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0)),
-            color: Colors.black26,
+    return new FlatButton(
             child: new Text(
-              "Usuń",
-              style: new TextStyle(fontSize: 20.0, color: Colors.white),
+              "Usuń".toUpperCase(),
             ),
+                    textColor: Theme.of(context).buttonColor,
+
             onPressed: () {
               // StoreProvider.of<AppState>(context)
               //     .dispatch(RemoveEvent(eventId: widget.event.id));
               // Navigator.of(context).pop();
-            }),
-      ),
-    );
+            });
+
   }
 
   Widget showEditButton(SectionEditVM vm) {
-    return new Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: SizedBox(
-        height: 40.0,
-        child: new RaisedButton(
-            elevation: 5.0,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0)),
-            color: Colors.black26,
+    return new FlatButton(
             child: new Text(
-              "Edytuj użytkowników",
-              style: new TextStyle(fontSize: 20.0, color: Colors.white),
+              "Użytkownicy".toUpperCase(),
             ),
+                    textColor: Theme.of(context).buttonColor,
+
             onPressed: () async {
                 editUsers(vm);
                 
-            }),
-      ),
-    );
+            });
   }
 
   void editUsers(SectionEditVM vm) async {
@@ -174,18 +164,9 @@ class _SectionEditState extends State<SectionEdit> {
   }
 
   Widget showSaveButton() {
-    return new Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: SizedBox(
-        height: 40.0,
-        child: new RaisedButton(
-            elevation: 5.0,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0)),
-            color: Colors.black26,
+    return new RaisedButton(
             child: new Text(
-              "Zapisz",
-              style: new TextStyle(fontSize: 20.0, color: Colors.white),
+              "Zapisz".toUpperCase(),
             ),
             onPressed: () {
               if (widget.isNew) {
@@ -234,8 +215,6 @@ class _SectionEditState extends State<SectionEdit> {
 
               }
               Navigator.of(context).pop();
-            }),
-      ),
-    );
+            });
   }
 }

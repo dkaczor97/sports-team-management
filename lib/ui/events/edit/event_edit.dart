@@ -91,7 +91,7 @@ class _EventEditState extends State<EventEdit> {
 
   Widget showForm(EventEditVM vm) {
     return new Container(
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.fromLTRB(6, 10, 6, 10),
       child: new Form(
         child: new ListView(
           shrinkWrap: true,
@@ -101,18 +101,35 @@ class _EventEditState extends State<EventEdit> {
             showEventLocationInput(),
             showEventDateInput(),
             showAttendanceStatus(vm),
-            _showButton(),
-            _showRemoveButton(),
-            showSectionsButton(vm)
+            Center(
+              child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+
+                children: <Widget>[
+                  _showButton(vm),
+                  _showRemoveButton(),
+                ],
+              ),
+            )
           ],
         ),
       ),
     );
   }
 
-  Widget _showButton() {
+  Widget _showButton(EventEditVM vm) {
     final userRole = StoreProvider.of<AppState>(context).state.user.role;
     if (userRole == Roles.admin || userRole == Roles.coach) {
+      if(_status == ScreenStatus.EDIT){
+        return Row(
+          children: <Widget>[
+          showSectionsButton(vm),
+          showSaveButton()
+        ],);
+      }
+      else{
+        showEditButton();
+      }
       return _status == ScreenStatus.EDIT ? showSaveButton() : showEditButton();
     } else {
       return Container();
@@ -130,7 +147,7 @@ class _EventEditState extends State<EventEdit> {
 
   Widget showEventNameInput() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
       child: new TextFormField(
         enabled: _status == ScreenStatus.EDIT,
         controller: _nameFieldController,
@@ -138,7 +155,8 @@ class _EventEditState extends State<EventEdit> {
         keyboardType: TextInputType.text,
         autofocus: false,
         decoration: new InputDecoration(
-            labelText: 'Nazwa', hasFloatingPlaceholder: true),
+            labelText: 'Nazwa', hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor, filled: true),
       ),
     );
   }
@@ -153,7 +171,8 @@ class _EventEditState extends State<EventEdit> {
         keyboardType: TextInputType.text,
         autofocus: false,
         decoration: new InputDecoration(
-            labelText: 'Szczegóły', hasFloatingPlaceholder: true),
+            labelText: 'Szczegóły', hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor, filled: true),
       ),
     );
   }
@@ -162,13 +181,15 @@ class _EventEditState extends State<EventEdit> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
       child: new TextFormField(
+
         enabled: _status == ScreenStatus.EDIT,
         controller: _locationFieldController,
         maxLines: 1,
         keyboardType: TextInputType.text,
         autofocus: false,
         decoration: new InputDecoration(
-            labelText: 'Lokalizacja', hasFloatingPlaceholder: true),
+            labelText: 'Lokalizacja', hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor, filled: true),
       ),
     );
   }
@@ -246,50 +267,47 @@ class _EventEditState extends State<EventEdit> {
         controller: _dateFieldController,
         readOnly: true,
         decoration: new InputDecoration(
-            labelText: 'Data', hasFloatingPlaceholder: true),
+            labelText: 'Data', hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor, filled: true),
         format: DateFormat("yyy-MM-dd HH:mm"),
         onShowPicker: (context, currentValue) async {
+          DateTime initialDate =
+              widget.isNew ? DateTime.now() : widget.event.date.toDate();
           final date = await showDatePicker(
               context: context,
               firstDate: DateTime(2000),
-              initialDate: DateTime.now(),
+              initialDate: initialDate,
               lastDate: DateTime(2100));
           if (date != null) {
+            TimeOfDay initialTime = TimeOfDay.fromDateTime(
+                widget.isNew ? DateTime.now() : widget.event.date.toDate());
             final time = await showTimePicker(
-                context: context,
-                initialTime: TimeOfDay.fromDateTime(DateTime.now()));
-            return DateTimeField.combine(date, time);
+                context: context, initialTime: initialTime);
+            return DateTimeField.combine(date, time ?? initialTime);
           } else {
-            return DateTime.now();
+            return initialDate;
           }
         },
       ),
     );
   }
+
   Widget showSectionsButton(EventEditVM vm) {
-    return new Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: SizedBox(
-        height: 40.0,
-        child: new RaisedButton(
-            elevation: 5.0,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0)),
-            color: Colors.black26,
-            child: new Text(
-              "Sekcje",
-              style: new TextStyle(fontSize: 20.0, color: Colors.white),
-            ),
-            onPressed: () async {
-              editSections(vm);
-            }),
-      ),
-    );
+    return new FlatButton.icon(
+        icon: Icon(Icons.list),
+        label: new Text(
+          "Sekcje".toUpperCase(),
+        ),
+        textColor: Theme.of(context).buttonColor,
+        onPressed: () async {
+          editSections(vm);
+        });
   }
 
   void editSections(EventEditVM vm) async {
     final items = vm.sections.map((section) {
-      return MultiselectDialogItem<Section>(value: section, label: section.name);
+      return MultiselectDialogItem<Section>(
+          value: section, label: section.name);
     }).toList();
 
     final selectedValues = await showDialog<List<Section>>(
@@ -298,11 +316,12 @@ class _EventEditState extends State<EventEdit> {
           return MultiselectDialog<Section>(
             items: items,
             initialSelectedValues: vm.sections
-                .where((test) =>
-                    widget.event.sections.any((s) => s.id == test.id)).toList(),
+                .where(
+                    (test) => widget.event.sections.any((s) => s.id == test.id))
+                .toList(),
           );
         });
-    if(selectedValues == null){
+    if (selectedValues == null) {
       return;
     }
     final List<Section> newElements = new List<Section>();
@@ -319,101 +338,70 @@ class _EventEditState extends State<EventEdit> {
       //tu już są same nowe
       newElements.add(new Section((s) => s
         ..id = selectedSection.id
-        ..name = selectedSection.name
-        ));
+        ..name = selectedSection.name));
     }
     for (var item in newElements) {
-      StoreProvider.of<AppState>(context).dispatch(AddSectionToEvent(eventId: widget.event.id, section: item));
+      StoreProvider.of<AppState>(context)
+          .dispatch(AddSectionToEvent(eventId: widget.event.id, section: item));
     }
     for (var item in elementsToRemove) {
-      StoreProvider.of<AppState>(context).dispatch(DeleteSectionFromEvent(eventId: widget.event.id, sectionId: item.id));
+      StoreProvider.of<AppState>(context).dispatch(
+          DeleteSectionFromEvent(eventId: widget.event.id, sectionId: item.id));
     }
     Navigator.of(context).pop();
   }
 
   Widget showSaveButton() {
-    return new Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: SizedBox(
-        height: 40.0,
-        child: new RaisedButton(
-            elevation: 5.0,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0)),
-            color: Colors.black26,
-            child: new Text(
-              "Zapisz",
-              style: new TextStyle(fontSize: 20.0, color: Colors.white),
-            ),
-            onPressed: () {
-              if (widget.isNew) {
-                Event newEvent = Event((event) => event
-                  ..name = _nameFieldController.text.trim()
-                  ..date = Timestamp.fromDate(
-                      DateTime.parse(_dateFieldController.text))
-                  ..description = _descriptionFieldController.text.trim()
-                  ..location = _locationFieldController.text.trim());
-                StoreProvider.of<AppState>(context)
-                    .dispatch(AddEvent(event: newEvent));
-              } else {
-                Event eventToUpdate = widget.event.rebuild((e) => e
-                  ..name = _nameFieldController.text
-                  ..description = _descriptionFieldController.text
-                  ..location = _locationFieldController.text
-                  ..date = Timestamp.fromDate(
-                      DateTime.parse(_dateFieldController.text)));
-                StoreProvider.of<AppState>(context)
-                    .dispatch(EditEvent(event: eventToUpdate));
-              }
-              Navigator.of(context).pop();
-            }),
-      ),
-    );
+    return new RaisedButton(
+        child: new Text(
+          "Zapisz".toUpperCase(),
+        ),
+        onPressed: () {
+          if (widget.isNew) {
+            Event newEvent = Event((event) => event
+              ..name = _nameFieldController.text.trim()
+              ..date =
+                  Timestamp.fromDate(DateTime.parse(_dateFieldController.text))
+              ..description = _descriptionFieldController.text.trim()
+              ..location = _locationFieldController.text.trim());
+            StoreProvider.of<AppState>(context)
+                .dispatch(AddEvent(event: newEvent));
+          } else {
+            Event eventToUpdate = widget.event.rebuild((e) => e
+              ..name = _nameFieldController.text
+              ..description = _descriptionFieldController.text
+              ..location = _locationFieldController.text
+              ..date = Timestamp.fromDate(
+                  DateTime.parse(_dateFieldController.text)));
+            StoreProvider.of<AppState>(context)
+                .dispatch(EditEvent(event: eventToUpdate));
+          }
+          Navigator.of(context).pop();
+        });
   }
 
   Widget showEditButton() {
-    return new Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: SizedBox(
-        height: 40.0,
-        child: new RaisedButton(
-            elevation: 5.0,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0)),
-            color: Colors.black26,
-            child: new Text(
-              "Edytuj",
-              style: new TextStyle(fontSize: 20.0, color: Colors.white),
-            ),
-            onPressed: () {
-              setState(() {
-                _status = ScreenStatus.EDIT;
-              });
-            }),
-      ),
+    return FlatButton.icon(
+      icon: Icon(Icons.edit),
+      textColor: Theme.of(context).buttonColor,
+      label: Text("Edytuj".toUpperCase()),
+      onPressed: () {
+        setState(() {
+          _status = ScreenStatus.EDIT;
+        });
+      },
     );
   }
 
   Widget showRemoveButton() {
-    return new Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: SizedBox(
-        height: 40.0,
-        child: new RaisedButton(
-            elevation: 5.0,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0)),
-            color: Colors.black26,
-            child: new Text(
-              "Usuń",
-              style: new TextStyle(fontSize: 20.0, color: Colors.white),
-            ),
-            onPressed: () {
-              StoreProvider.of<AppState>(context)
-                  .dispatch(RemoveEvent(eventId: widget.event.id));
-              Navigator.of(context).pop();
-            }),
-      ),
-    );
+    return new FlatButton.icon(
+        icon: Icon(Icons.delete),
+        label: new Text("Usuń".toUpperCase()),
+        textColor: Theme.of(context).buttonColor,
+        onPressed: () {
+          StoreProvider.of<AppState>(context)
+              .dispatch(RemoveEvent(eventId: widget.event.id));
+          Navigator.of(context).pop();
+        });
   }
 }

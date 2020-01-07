@@ -11,27 +11,27 @@ class AttendanceListItem extends StatelessWidget {
         child: ListTile(
       leading: _getLeading(),
       title: Text(attendance.name),
-      subtitle: Text(attendance.reason ?? ""),
     ));
   }
 
   Widget _getLeading(){
   if(attendance.status == AttendanceStatus.present){
     return CircleAvatar(
-      child: Icon(Icons.check),
+      child: Icon(Icons.check, color: Colors.white),
       backgroundColor: Color(Colors.green.value),
     );
   }
   else if (attendance.status == AttendanceStatus.absent){
     return CircleAvatar(
-      child: Icon(Icons.close),
+      child: Icon(Icons.close, 
+      color: Colors.red),
       backgroundColor: Color(Colors.red.value),
     );
   }
   else //if (attendance.status == AttendanceStatus.none)
   {
     return CircleAvatar(
-      child: Icon(Icons.help),
+      child: Icon(Icons.help, color: Colors.white),
       backgroundColor: Color(Colors.yellow[800].value),
     );
   }
