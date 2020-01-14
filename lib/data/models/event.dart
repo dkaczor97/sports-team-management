@@ -30,4 +30,9 @@ abstract class Event implements Built<Event, EventBuilder> {
   Event._();
 
   factory Event([updates(EventBuilder b)]) = _$Event;
+
+  factory Event.init()=>Event((e)=>e
+  ..attendance = ListBuilder()
+  ..sections = ListBuilder()
+  );
 }

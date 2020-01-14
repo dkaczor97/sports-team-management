@@ -127,7 +127,16 @@ if(_userRole != Roles.player){
                     });
                     Navigator.of(context).pop();
                   })
-              : Container()
+              : Container(),
+              _createDrawerItem(
+                icon: Icons.exit_to_app,
+                text: "Wyloguj",
+                onTap: (){
+                            StoreProvider.of<AppState>(context).dispatch(UserLogout());
+                Navigator.of(context).pop();
+
+                }
+              )
         ],
       ),
     );
@@ -140,7 +149,7 @@ if(_userRole != Roles.player){
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => EventEdit(
                   isNew: true,
-                  event: new Event(),
+                  event: Event.init(),
                 )));
         StoreProvider.of<AppState>(context).dispatch(LoadEvents);
       },

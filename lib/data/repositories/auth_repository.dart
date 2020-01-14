@@ -21,17 +21,19 @@ class AuthRepository{
   final FirebaseMessaging _messaging;
 
   AuthRepository(this._auth, this._firestore, this._messaging){
-    _messaging.requestNotificationPermissions(
-        const IosNotificationSettings(sound: true, badge: true, alert: true));
+    _messaging.requestNotificationPermissions();
     _messaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
+        return;
               },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
+        return;
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");
+        return;
       },
     );
   }
@@ -84,39 +86,9 @@ class AuthRepository{
       ..token = token);
       await documentReference.setData(toMap(user));
     }
-    await sendAndRetrieveMessage(user.uid);
     return user;
   }
 
-
-Future<void> sendAndRetrieveMessage(String servertoken) async {
-  await _messaging.requestNotificationPermissions(
-    const IosNotificationSettings(sound: true, badge: true, alert: true),
-  );
-
-  await http.post(
-    'https://fcm.googleapis.com/fcm/send',
-     headers: <String, String>{
-       'Content-Type': 'application/json',
-       'Authorization': 'key=$servertoken',
-     },
-     body: jsonEncode(
-     <String, dynamic>{
-       'notification': <String, dynamic>{
-         'body': 'this is a body',
-         'title': 'this is a title'
-       },
-       'priority': 'high',
-       'data': <String, dynamic>{
-         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-         'id': '1',
-         'status': 'done'
-       },
-       'to': "cMPtvXBajsU:APA91bHpW2QRbGRI0mtZWE7maeTLh6FRZ7pTAJsTpsr2LovF7gcPjpt4lEdLcdcEW73wmvo-Zga6uNU5gpctxiyiRQSpM423Hp2B1DIwc3UW__ikvdO9rduL5FLIjmBcykks3JpVd6pD",
-     },
-    ),
-  );
-}
 
   Future<void> editUser(User user) async{
     await _firestore.document(FirestorePaths.userPath(user.uid)).updateData(toMap(user));

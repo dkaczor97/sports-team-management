@@ -76,8 +76,10 @@ void Function(
     next(action);
     
     await repository.addEvent(action.event).then((result){
-      store.dispatch(LoadEvents());
+      for(var section in action.event.sections)
+      store.dispatch(AddSectionToEvent(eventId: result.id, section: section));
     });
+      store.dispatch(LoadEvents());
   };
 }
 

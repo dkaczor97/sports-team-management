@@ -69,8 +69,9 @@ static const String path = 'events';
     return eventAttendance.documents.map((d)=>_attendanceFromDoc(d)).toList();
   }
 
-  Future<void> addEvent(Event event) async{
-    await firestore.collection(FirestorePaths.PATH_EVENTS).add(toMap(event));
+  Future<Event> addEvent(Event event) async{
+    final reference = await firestore.collection(FirestorePaths.PATH_EVENTS).add(toMap(event));
+    return _eventFromDoc(await reference.get());
   }
 
     Future<void> editEvent(Event event) async{
@@ -101,7 +102,7 @@ static const String path = 'events';
       .getDocuments();
       
     final attendanceList = eventAttendance.documents.map((d)=>_attendanceFromDoc(d)).toList();
-    if(attendanceList != null && attendanceList.length > 0){
+    if(attendanceList != null && attendanceList.length > 0 && attendanceList.any((test)=>test.uid.contains(uid))){
       return attendanceList.firstWhere((test)=> test.uid.contains((uid)));
     }
     else{

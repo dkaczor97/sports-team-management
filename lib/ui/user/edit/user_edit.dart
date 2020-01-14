@@ -41,7 +41,7 @@ class _UserEditState extends State<UserEdit> {
 
   Widget showForm() {
     return new Container(
-      padding: EdgeInsets.fromLTRB(6,10,6,10),
+      padding: EdgeInsets.fromLTRB(6, 10, 6, 10),
       child: new Form(
         child: new ListView(
           shrinkWrap: true,
@@ -53,10 +53,9 @@ class _UserEditState extends State<UserEdit> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-            showLogoutButton(),
-                        showPrimaryButton(),
-
-            ],)
+                showPrimaryButton(),
+              ],
+            )
           ],
         ),
       ),
@@ -71,8 +70,10 @@ class _UserEditState extends State<UserEdit> {
         maxLines: 1,
         autofocus: false,
         decoration: new InputDecoration(
-            labelText: 'e-mail', hasFloatingPlaceholder: true,
-            fillColor: Theme.of(context).cardColor, filled: true),
+            labelText: 'e-mail',
+            hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor,
+            filled: true),
         initialValue: widget.user.email,
       ),
     );
@@ -87,8 +88,10 @@ class _UserEditState extends State<UserEdit> {
         keyboardType: TextInputType.text,
         autofocus: false,
         decoration: new InputDecoration(
-            labelText: 'Imię i nazwisko', hasFloatingPlaceholder: true,
-            fillColor: Theme.of(context).cardColor, filled: true),
+            labelText: 'Imię i nazwisko',
+            hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor,
+            filled: true),
       ),
     );
   }
@@ -102,8 +105,10 @@ class _UserEditState extends State<UserEdit> {
         keyboardType: TextInputType.number,
         autofocus: false,
         decoration: new InputDecoration(
-            labelText: 'Numer koszulki', hasFloatingPlaceholder: true,
-            fillColor: Theme.of(context).cardColor, filled: true),
+            labelText: 'Numer koszulki',
+            hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor,
+            filled: true),
       ),
     );
   }
@@ -113,9 +118,11 @@ class _UserEditState extends State<UserEdit> {
       return Padding(
         padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
         child: DropdownButtonFormField(
-          decoration: new InputDecoration(
-            labelText: 'Rola', hasFloatingPlaceholder: true,
-            fillColor: Theme.of(context).cardColor, filled: true),
+            decoration: new InputDecoration(
+                labelText: 'Rola',
+                hasFloatingPlaceholder: true,
+                fillColor: Theme.of(context).cardColor,
+                filled: true),
             value: userRole,
             items: <String>[
               Roles.admin,
@@ -137,32 +144,29 @@ class _UserEditState extends State<UserEdit> {
 
   Widget showPrimaryButton() {
     return RaisedButton(
-          child: new Text(
-            "Zapisz".toUpperCase()
-          ),
-          onPressed: () {
-            final userToUpdate = widget.user.rebuild((u) => u
-              ..name = _nameFieldController.text
-              ..jerseyNumber = int.parse(_jerseyNumberController.text)
-              ..role = userRole);
-            StoreProvider.of<AppState>(context).dispatch(EditUser(
-                user: userToUpdate, isCurrentUser: widget.isCurrentUser));
-            Navigator.of(context).pop();
-          },
-        );
+      child: new Text("Zapisz".toUpperCase()),
+      onPressed: () {
+        final userToUpdate = widget.user.rebuild((u) => u
+          ..name = _nameFieldController.text
+          ..jerseyNumber = int.parse(_jerseyNumberController.text)
+          ..role = userRole);
+        StoreProvider.of<AppState>(context).dispatch(
+            EditUser(user: userToUpdate, isCurrentUser: widget.isCurrentUser));
+        Navigator.of(context).pop();
+      },
+    );
   }
 
   Widget showLogoutButton() {
-    if(widget.isCurrentUser){
+    if (widget.isCurrentUser) {
       return FlatButton(
         textColor: Theme.of(context).buttonColor,
         child: Text("Wyloguj".toUpperCase()),
-        onPressed: (){
+        onPressed: () {
           StoreProvider.of<AppState>(context).dispatch(UserLogout());
         },
       );
-    }
-    else{
+    } else {
       return Container();
     }
   }

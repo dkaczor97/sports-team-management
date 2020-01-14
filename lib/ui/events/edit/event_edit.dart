@@ -10,6 +10,7 @@ import 'package:sports_team_management/enums/attendance/attendance_status.dart';
 import 'package:sports_team_management/enums/role/roles.dart';
 import 'package:sports_team_management/redux/app/app_state.dart';
 import 'package:sports_team_management/redux/event/event_actions.dart';
+import 'package:sports_team_management/redux/news/news_actions.dart';
 import 'package:sports_team_management/ui/enums/screen_state.dart';
 import 'package:sports_team_management/ui/events/attendance/attendance_list.dart';
 import 'package:sports_team_management/ui/events/edit/event_edit_vm.dart';
@@ -29,6 +30,7 @@ class _EventEditState extends State<EventEdit> {
   final _descriptionFieldController = TextEditingController();
   final _locationFieldController = TextEditingController();
   final _dateFieldController = TextEditingController();
+  List<Section> _currentSectionList = new List<Section>();
 
   ScreenStatus _status;
   @override
@@ -41,6 +43,7 @@ class _EventEditState extends State<EventEdit> {
       _descriptionFieldController.text = widget.event.description;
       _locationFieldController.text = widget.event.location;
       _dateFieldController.text = widget.event.date.toDate().toString();
+      _currentSectionList = widget.event.sections.toList();
     } else {
       _status = ScreenStatus.EDIT;
     }
@@ -103,8 +106,7 @@ class _EventEditState extends State<EventEdit> {
             showAttendanceStatus(vm),
             Center(
               child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   _showButton(vm),
                   _showRemoveButton(),
@@ -120,14 +122,11 @@ class _EventEditState extends State<EventEdit> {
   Widget _showButton(EventEditVM vm) {
     final userRole = StoreProvider.of<AppState>(context).state.user.role;
     if (userRole == Roles.admin || userRole == Roles.coach) {
-      if(_status == ScreenStatus.EDIT){
+      if (_status == ScreenStatus.EDIT) {
         return Row(
-          children: <Widget>[
-          showSectionsButton(vm),
-          showSaveButton()
-        ],);
-      }
-      else{
+          children: <Widget>[showSectionsButton(vm), showSaveButton()],
+        );
+      } else {
         showEditButton();
       }
       return _status == ScreenStatus.EDIT ? showSaveButton() : showEditButton();
@@ -155,8 +154,10 @@ class _EventEditState extends State<EventEdit> {
         keyboardType: TextInputType.text,
         autofocus: false,
         decoration: new InputDecoration(
-            labelText: 'Nazwa', hasFloatingPlaceholder: true,
-            fillColor: Theme.of(context).cardColor, filled: true),
+            labelText: 'Nazwa',
+            hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor,
+            filled: true),
       ),
     );
   }
@@ -171,8 +172,10 @@ class _EventEditState extends State<EventEdit> {
         keyboardType: TextInputType.text,
         autofocus: false,
         decoration: new InputDecoration(
-            labelText: 'Szczegóły', hasFloatingPlaceholder: true,
-            fillColor: Theme.of(context).cardColor, filled: true),
+            labelText: 'Szczegóły',
+            hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor,
+            filled: true),
       ),
     );
   }
@@ -181,15 +184,16 @@ class _EventEditState extends State<EventEdit> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
       child: new TextFormField(
-
         enabled: _status == ScreenStatus.EDIT,
         controller: _locationFieldController,
         maxLines: 1,
         keyboardType: TextInputType.text,
         autofocus: false,
         decoration: new InputDecoration(
-            labelText: 'Lokalizacja', hasFloatingPlaceholder: true,
-            fillColor: Theme.of(context).cardColor, filled: true),
+            labelText: 'Lokalizacja',
+            hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor,
+            filled: true),
       ),
     );
   }
@@ -214,6 +218,17 @@ class _EventEditState extends State<EventEdit> {
                   ..name = curentUser.name);
                 StoreProvider.of<AppState>(context).dispatch(SaveAttendance(
                     eventId: widget.event.id, attendance: newAttendance));
+                StoreProvider.of<AppState>(context).dispatch(LoadEvents());
+                if(widget.event.attendance.any((test)=>test.uid == curentUser.uid)){
+                  widget.event.attendance.firstWhere((test)=>test.uid == curentUser.uid).rebuild((a)=>a..status = AttendanceStatus.present); 
+                }
+                else{
+                  widget.event.attendance.toBuilder().add(newAttendance);
+
+                  // widget.event.rebuild((b)=> b
+                  // ..attendance.add(newAttendance));
+                  //widget.event.attendance.rebuild((a)=>a.add(newAttendance));
+                }
               });
             },
             child: Icon(Icons.check),
@@ -267,8 +282,10 @@ class _EventEditState extends State<EventEdit> {
         controller: _dateFieldController,
         readOnly: true,
         decoration: new InputDecoration(
-            labelText: 'Data', hasFloatingPlaceholder: true,
-            fillColor: Theme.of(context).cardColor, filled: true),
+            labelText: 'Data',
+            hasFloatingPlaceholder: true,
+            fillColor: Theme.of(context).cardColor,
+            filled: true),
         format: DateFormat("yyy-MM-dd HH:mm"),
         onShowPicker: (context, currentValue) async {
           DateTime initialDate =
@@ -317,38 +334,16 @@ class _EventEditState extends State<EventEdit> {
             items: items,
             initialSelectedValues: vm.sections
                 .where(
-                    (test) => widget.event.sections.any((s) => s.id == test.id))
+                    (test) =>_currentSectionList.any((s) => s.id == test.id))
                 .toList(),
           );
         });
     if (selectedValues == null) {
       return;
     }
-    final List<Section> newElements = new List<Section>();
-    final List<Section> elementsToRemove = new List<Section>();
-    for (var s in widget.event.sections) {
-      if (!selectedValues.any((test) => test.id == s.id)) {
-        elementsToRemove.add(s); //odznaczony
-      } else {
-        //nic sie nie zmieniło, można zostawić
-        selectedValues.removeWhere((test) => test.id == s.id);
-      }
-    }
-    for (Section selectedSection in selectedValues) {
-      //tu już są same nowe
-      newElements.add(new Section((s) => s
-        ..id = selectedSection.id
-        ..name = selectedSection.name));
-    }
-    for (var item in newElements) {
-      StoreProvider.of<AppState>(context)
-          .dispatch(AddSectionToEvent(eventId: widget.event.id, section: item));
-    }
-    for (var item in elementsToRemove) {
-      StoreProvider.of<AppState>(context).dispatch(
-          DeleteSectionFromEvent(eventId: widget.event.id, sectionId: item.id));
-    }
-    Navigator.of(context).pop();
+    setState(() {
+      _currentSectionList = selectedValues;
+    });
   }
 
   Widget showSaveButton() {
@@ -363,10 +358,33 @@ class _EventEditState extends State<EventEdit> {
               ..date =
                   Timestamp.fromDate(DateTime.parse(_dateFieldController.text))
               ..description = _descriptionFieldController.text.trim()
-              ..location = _locationFieldController.text.trim());
+              ..location = _locationFieldController.text.trim()
+              ..sections.addAll(_currentSectionList));
             StoreProvider.of<AppState>(context)
                 .dispatch(AddEvent(event: newEvent));
           } else {
+            final List<Section> newElements = new List<Section>();
+            final List<Section> elementsToRemove = new List<Section>();
+            for(var us in widget.event.sections){
+              if(!_currentSectionList.any((test)=>test.id == us.id)){
+                elementsToRemove.add(us);
+              }
+              else{
+                _currentSectionList.removeWhere((test)=>test.id == us.id);
+              }
+            }
+            newElements.addAll(_currentSectionList);
+            for(var item in newElements){
+              StoreProvider.of<AppState>(context)
+                .dispatch(AddSectionToEvent(section: item, eventId: widget.event.id));
+            }
+            for(var item in elementsToRemove){
+              StoreProvider.of<AppState>(context)
+                .dispatch(DeleteSectionFromEvent(sectionId: item.id, eventId: widget.event.id));
+            }
+
+
+
             Event eventToUpdate = widget.event.rebuild((e) => e
               ..name = _nameFieldController.text
               ..description = _descriptionFieldController.text

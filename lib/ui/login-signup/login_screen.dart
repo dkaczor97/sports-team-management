@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:sports_team_management/ui/login-signup/login-signup-page.dart';
 import 'package:sports_team_management/redux/app/app_state.dart';
 import 'package:sports_team_management/redux/auth/auth_actions.dart';
 
@@ -97,13 +96,8 @@ class _LoginFormState extends State<_LoginForm>{
     };
 
     final _submitButton = new RaisedButton(
-            elevation: 5.0,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0)),
-            color: Colors.black26,
             child: new Text(
               _isRegisterForm ? "Zarejestruj" : "Zaloguj się",
-              style: new TextStyle(fontSize: 20.0, color: Colors.white),
             ),
             onPressed:
                 loginCallback //vm.onLoginPressed(email: _email,password: _password),
@@ -112,7 +106,6 @@ class _LoginFormState extends State<_LoginForm>{
     final _changeStatusButton = new FlatButton(
       child: Text(
         _isRegisterForm ? "Powrót": "Załóż konto",
-        style: new TextStyle(fontSize: 20.0, color: Colors.white),
       ),
       onPressed:(){
         setState(() {
@@ -155,29 +148,3 @@ class _LoginFormState extends State<_LoginForm>{
   }
 
 }
-
-// class LoginViewModel {
-//   bool isLoading;
-//   AuthState authState;
-//   Function({String email, String password}) onLoginPressed;
-//   Function({String email, String password}) onSignUpPressed;
-//   LoginViewModel(
-//       {this.isLoading,
-//       this.authState,
-//       this.onLoginPressed,
-//       this.onSignUpPressed});
-
-//   static LoginViewModel fromStore(Store<AppState> store) {
-//     return LoginViewModel(
-//         isLoading: store.state.isLoading,
-//         authState: store.state.authState,
-//         onLoginPressed: ({String email, String password}) {
-//           if (store.state.isLoading) {
-//             return;
-//           }
-//           final Completer<Null> completer = Completer<Null>();
-//           store.dispatch(UserLogin(
-//               completer: completer, email: email, password: password));
-//         });
-//   }
-// }
