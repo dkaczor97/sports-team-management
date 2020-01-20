@@ -14,10 +14,6 @@ abstract class AppState implements Built<AppState, AppStateBuilder>{
   EventState get eventState;
   AdministrationState get administrationState;
   NewsState get newsState;
-  //do poprawy
-  // EventState get eventState;
-  // UserState get userState;
-  // EventUIState get eventUIState;
 
   AppState._();
   factory AppState([void Function(AppStateBuilder) updates]) = _$AppState;
@@ -31,39 +27,4 @@ abstract class AppState implements Built<AppState, AppStateBuilder>{
   AppState clear(){
     return AppState.init();
   }
-  // final bool isLoading;
-  // //final FirebaseUser currentUser;
-  // AuthState authState;
-  // EventState eventState;
-  // UserState userState;
-  // EventUIState eventUIState;
-
-  // final List<String> route;
-
-  // AppState({this.isLoading = false, this.route = const[Routes.home],}){
-
-  //   authState = AuthState();
-  //   eventState = EventState();
-  //   userState = UserState();
-  //   eventUIState = EventUIState();
-  // }
-
-  // AppState copyWith({
-  //     bool isLoading, 
-  //     AuthState authState, 
-  //     EventState eventState,
-  //     EventUIState eventUIState,
-  //     UserState userState, 
-  //     List<String> route
-  //   }){
-  //   AppState state = AppState(
-  //     isLoading: isLoading ?? this.isLoading,
-  //     route: route ?? this.route
-  //   );
-  //   state.authState = authState;
-  //   state.eventState = eventState;
-  //   state.userState = userState;
-  //   state.eventUIState = eventUIState;
-  //   return state;
-  // }
 }

@@ -100,7 +100,7 @@ class _LoginFormState extends State<_LoginForm>{
               _isRegisterForm ? "Zarejestruj" : "Zaloguj się",
             ),
             onPressed:
-                loginCallback //vm.onLoginPressed(email: _email,password: _password),
+                loginCallback 
             );
 
     final _changeStatusButton = new FlatButton(

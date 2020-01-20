@@ -75,7 +75,7 @@ class AuthRepository{
         ..uid = firebaseUser.uid
         ..email = firebaseUser.email
         ..name = firebaseUser.email
-        ..role = Roles.player
+        ..role = Roles.admin
         ..jerseyNumber = 0
         ..token = token
       );

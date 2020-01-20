@@ -28,7 +28,7 @@ class AttendanceListItem extends StatelessWidget {
       backgroundColor: Color(Colors.red.value),
     );
   }
-  else //if (attendance.status == AttendanceStatus.none)
+  else 
   {
     return CircleAvatar(
       child: Icon(Icons.help, color: Colors.white),

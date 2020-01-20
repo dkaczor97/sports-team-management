@@ -79,9 +79,6 @@ static const String path = 'events';
   }
 
   Future<void> saveAttendance(String eventId, Attendance attendance) async{
-    // final eventAttendance = await firestore
-    //   .document(FirestorePaths.eventPath(eventId))
-    //   .collection(FirestorePaths.PATH_ATTENDANTS);
     if(attendance.id == null || attendance.id == ""){
       await firestore
       .document(FirestorePaths.eventPath(eventId))

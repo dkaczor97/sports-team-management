@@ -219,10 +219,12 @@ class _EventEditState extends State<EventEdit> {
                 StoreProvider.of<AppState>(context).dispatch(SaveAttendance(
                     eventId: widget.event.id, attendance: newAttendance));
                 StoreProvider.of<AppState>(context).dispatch(LoadEvents());
-                if(widget.event.attendance.any((test)=>test.uid == curentUser.uid)){
-                  widget.event.attendance.firstWhere((test)=>test.uid == curentUser.uid).rebuild((a)=>a..status = AttendanceStatus.present); 
-                }
-                else{
+                if (widget.event.attendance
+                    .any((test) => test.uid == curentUser.uid)) {
+                  widget.event.attendance
+                      .firstWhere((test) => test.uid == curentUser.uid)
+                      .rebuild((a) => a..status = AttendanceStatus.present);
+                } else {
                   widget.event.attendance.toBuilder().add(newAttendance);
 
                   // widget.event.rebuild((b)=> b
@@ -334,7 +336,7 @@ class _EventEditState extends State<EventEdit> {
             items: items,
             initialSelectedValues: vm.sections
                 .where(
-                    (test) =>_currentSectionList.any((s) => s.id == test.id))
+                    (test) => _currentSectionList.any((s) => s.id == test.id))
                 .toList(),
           );
         });
@@ -365,25 +367,23 @@ class _EventEditState extends State<EventEdit> {
           } else {
             final List<Section> newElements = new List<Section>();
             final List<Section> elementsToRemove = new List<Section>();
-            for(var us in widget.event.sections){
-              if(!_currentSectionList.any((test)=>test.id == us.id)){
-                elementsToRemove.add(us);
-              }
-              else{
-                _currentSectionList.removeWhere((test)=>test.id == us.id);
+            for (var section in widget.event.sections) {
+              if (!_currentSectionList.any((test) => test.id == section.id)) {
+                elementsToRemove.add(section);
+              } else {
+                _currentSectionList.removeWhere((test) => test.id == section.id);
               }
             }
             newElements.addAll(_currentSectionList);
-            for(var item in newElements){
-              StoreProvider.of<AppState>(context)
-                .dispatch(AddSectionToEvent(section: item, eventId: widget.event.id));
+            for (var item in newElements) {
+              StoreProvider.of<AppState>(context).dispatch(
+                  AddSectionToEvent(section: item, eventId: widget.event.id));
             }
-            for(var item in elementsToRemove){
-              StoreProvider.of<AppState>(context)
-                .dispatch(DeleteSectionFromEvent(sectionId: item.id, eventId: widget.event.id));
+            for (var item in elementsToRemove) {
+              StoreProvider.of<AppState>(context).dispatch(
+                  DeleteSectionFromEvent(
+                      sectionId: item.id, eventId: widget.event.id));
             }
-
-
 
             Event eventToUpdate = widget.event.rebuild((e) => e
               ..name = _nameFieldController.text

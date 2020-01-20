@@ -4,7 +4,6 @@ import 'package:sports_team_management/data/models/user.dart';
 import 'package:sports_team_management/enums/role/roles.dart';
 import 'package:sports_team_management/redux/app/app_state.dart';
 import 'package:sports_team_management/redux/auth/auth_actions.dart';
-import 'package:sports_team_management/ui/user/edit/user_edit_vm.dart';
 
 class UserEdit extends StatefulWidget {
   final User user;

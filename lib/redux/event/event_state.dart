@@ -1,25 +1,3 @@
-// import 'package:sports_team_management/data/models/event_model.dart';
-
-// class EventState{
-//   final List<EventEntity> list;
-//   EventState({this.list});
-
-//   EventState copyWith({List<EventEntity> list}){
-//     return new EventState(
-//       list: list ?? this.list
-//     );
-//   }
-// }
-
-// class EventUIState{
-//   final EventEntity editing;
-//   EventUIState({this.editing});
-
-//   EventUIState copyWith({EventEntity entity}){
-//     return new EventUIState(editing: entity);
-//   }
-// }
-
 import 'dart:convert';
 
 import 'package:built_collection/built_collection.dart';

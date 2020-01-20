@@ -55,7 +55,3 @@ class DeleteSectionFromEvent{
   final String sectionId;
   DeleteSectionFromEvent({this.eventId, this.sectionId});
 }
-// class ViewEvent{
-//   final EventEntity event;
-//   ViewEvent({this.event});
-// }

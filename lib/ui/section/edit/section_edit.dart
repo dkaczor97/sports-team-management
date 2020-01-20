@@ -176,11 +176,6 @@ class _SectionEditState extends State<SectionEdit> {
                 StoreProvider.of<AppState>(context)
                     .dispatch(AddSection(newSection));
               } else {
-                // Section sectionToUpdate = widget.section.rebuild((s)=>
-                // s..name = _nameFieldController.text
-                // ..users.addAll(_currentUserList));
-
-                //-------------------------------------
                 final List<UserSection> newElements = new List<UserSection>();
                 final List<UserSection> elementsToRemove =
                     new List<UserSection>();
@@ -193,14 +188,6 @@ class _SectionEditState extends State<SectionEdit> {
                   }
                 }
                 newElements.addAll(_currentUserList);
-                // for (User selectedUser in _currentUserList) {
-                //   //tu już są same nowe
-                //   newElements.add(new UserSection((us) => us
-                //     ..uid = selectedUser.uid
-                //     ..userName = selectedUser.name
-                //     ..sectionId = widget.section.id
-                //     ..sectionName = widget.section.name));
-                // }
                 for (var item in newElements) {
                   StoreProvider.of<AppState>(context)
                       .dispatch(AddUserSection(item));
@@ -209,10 +196,6 @@ class _SectionEditState extends State<SectionEdit> {
                   StoreProvider.of<AppState>(context)
                       .dispatch(DeleteUserSection(item.id));
                 }
-//----------------------------------------------
-                // StoreProvider.of<AppState>(context)
-                //     .dispatch(EditSection(sectionToUpdate));
-
               }
               Navigator.of(context).pop();
             });

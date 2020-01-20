@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:sports_team_management/data/models/event.dart';
 import 'package:sports_team_management/data/models/news.dart';
+import 'package:sports_team_management/data/models/user.dart';
 import 'package:sports_team_management/enums/role/roles.dart';
 import 'package:sports_team_management/redux/app/app_state.dart';
 import 'package:sports_team_management/redux/auth/auth_actions.dart';
@@ -64,15 +65,6 @@ if(_userRole != Roles.player){
     );
   }
 
-  // @override
-  // initState() {
-  //   super.initState();
-  //   _currentScreen = NewsScreen();
-  //   //_userRole = ;
-  //   _currentFab = Container();
-  //   _appBarText = "Strona główna";
-  // }
-
   Widget _createDrawerWidget(BuildContext context) {
     return Drawer(
       child: ListView(
@@ -83,7 +75,6 @@ if(_userRole != Roles.player){
               icon: Icons.home,
               text: "Strona główna",
               onTap: () {
-                //final _userRole = StoreProvider.of<AppState>(context).state.user.role;
                 StoreProvider.of<AppState>(context).dispatch(LoadNewsList());
                 setState(() {
                   _currentScreen = NewsScreen();
@@ -100,7 +91,6 @@ if(_userRole != Roles.player){
               icon: Icons.calendar_today,
               text: "Kalendarz",
               onTap: () {
-                //final _userRole = StoreProvider.of<AppState>(context).state.user.role;
                 StoreProvider.of<AppState>(context).dispatch(LoadSections());
                 StoreProvider.of<AppState>(context).dispatch(LoadEvents());
                 setState(() {
@@ -171,16 +161,17 @@ if(_userRole != Roles.player){
   }
 
   Widget _createHeader(BuildContext context) {
+    User user = StoreProvider.of<AppState>(context).state.user;
     return UserAccountsDrawerHeader(
         accountName:
-            Text(StoreProvider.of<AppState>(context).state.user.name ?? ""),
+            Text(user != null ? user.name : ""),
         accountEmail:
-            Text(StoreProvider.of<AppState>(context).state.user.email ?? ""),
+            Text(user != null ? user.email : ""),
         currentAccountPicture: CircleAvatar(
           backgroundColor: Theme.of(context).buttonColor,
           foregroundColor: Theme.of(context).textTheme.button.color,
                     child: Text(
-            (StoreProvider.of<AppState>(context).state.user.email ?? " ")
+            (user != null ? user.email : " ")
                 .substring(0, 1)
                 .toUpperCase(),
             style: TextStyle(fontSize: 40.0),

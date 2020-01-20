@@ -10,45 +10,6 @@ import 'package:sports_team_management/ui/user/user_list.dart';
 
 import 'administration_screen_vm.dart';
 
-// class AdministrationScreen extends StatelessWidget{
-//     static const String route='/administration';
-
-//   @override
-//   Widget build(BuildContext context){
-//     return StoreConnector<AppState, AdministrationScreenVM>(
-//       onInit: (store){
-//         store.dispatch(LoadUsers());
-//         store.dispatch(LoadSections());
-
-//       },
-//       converter: AdministrationScreenVM.fromStore,
-//       builder: (context, vm){
-//         return DefaultTabController(
-//           length: 2,
-//           child: new Scaffold(
-
-//             appBar: new AppBar(
-//               actions: <Widget>[],
-//               title: new TabBar(
-//                 tabs: <Widget>[
-//                   new Tab(text: "Użytkownicy",),
-//                   new Tab(text: "Sekcje",)
-//                 ],
-//               ),
-//             ),
-//             body: new TabBarView(
-//               children: <Widget>[
-//                 UserList(users: vm.users.toList()),
-//                 SectionList(sections: vm.sections.toList(),)
-//               ],
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
-
 class AdministrationScreen extends StatefulWidget {
   @override
   _AdministrationScreenState createState() => _AdministrationScreenState();
