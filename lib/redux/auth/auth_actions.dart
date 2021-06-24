@@ -1,33 +1,30 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:flutter/cupertino.dart';
 import 'package:sports_team_management/data/models/user.dart';
 
-
-
-class UserLoginSuccess{
+class UserLoginSuccess {
   UserLoginSuccess({
     this.user,
-
   });
-  final FirebaseUser user;
+  final FirebaseAuth.User user;
 }
 
-class VerifyAuthenticationState{}
+class VerifyAuthenticationState {}
 
 @immutable
-class OnAuthenticated{
+class OnAuthenticated {
   final User user;
   const OnAuthenticated({@required this.user});
 
   @override
-  String toString(){
+  String toString() {
     return "OnAuthenticated{user: $user}";
   }
 }
 
-class UserLogin{
+class UserLogin {
   UserLogin({
     this.email,
     this.password,
@@ -38,7 +35,7 @@ class UserLogin{
   final String password;
 }
 
-class UserSignup{
+class UserSignup {
   UserSignup({
     this.email,
     this.password,
@@ -49,13 +46,13 @@ class UserSignup{
   final String password;
 }
 
-class UserLogout{}
+class UserLogout {}
 
-class OnLogoutSuccess{
+class OnLogoutSuccess {
   OnLogoutSuccess();
 
   @override
-  String toString(){
+  String toString() {
     return "LogOut{user: null}";
   }
 }
@@ -71,17 +68,15 @@ class OnLogoutFail {
   }
 }
 
-class EditUser{
+class EditUser {
   final User user;
   final bool isCurrentUser;
   EditUser({this.user, this.isCurrentUser});
 }
 
-class LoadUsers{
+class LoadUsers {}
 
-}
-
-class LoadUsersResult{
+class LoadUsersResult {
   final List<User> users;
   LoadUsersResult({this.users});
 }

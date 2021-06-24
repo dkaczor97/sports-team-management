@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -24,7 +25,9 @@ import 'package:sports_team_management/routes/routes.dart';
 import 'data/repositories/event_repository.dart';
 
 void main() {
-  initializeDateFormatting("pl_PL", null).then((param) {
+  initializeDateFormatting("pl_PL", null).then((param) async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
     runApp(SportsManagementApp());
   });
 }
@@ -40,19 +43,23 @@ class SportsManagementApp extends StatefulWidget {
 
 class _SportsManagementAppState extends State<SportsManagementApp> {
   Store<AppState> store;
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   @override
   void initState() {
     super.initState();
     store = Store<AppState>(appReducer,
         initialState: AppState.init(),
-        middleware: 
-          createAuthMiddleware(AuthRepository(FirebaseAuth.instance, Firestore.instance, _firebaseMessaging), navigatorKey)
-          ..addAll(createStoreEventsMiddleware(EventRepository(Firestore.instance)))
-          ..addAll(createSectionMiddleware(SectionRepository(Firestore.instance)))
-          ..addAll(createNewsMiddleware(NewsRepository(Firestore.instance)))
-          );
+        middleware: createAuthMiddleware(
+            AuthRepository(FirebaseAuth.instance, FirebaseFirestore.instance,
+                _firebaseMessaging),
+            navigatorKey)
+          ..addAll(createStoreEventsMiddleware(
+              EventRepository(FirebaseFirestore.instance)))
+          ..addAll(createSectionMiddleware(
+              SectionRepository(FirebaseFirestore.instance)))
+          ..addAll(createNewsMiddleware(
+              NewsRepository(FirebaseFirestore.instance))));
     store.dispatch(VerifyAuthenticationState());
     store.dispatch(LoadSections());
   }
@@ -65,7 +72,6 @@ class _SportsManagementAppState extends State<SportsManagementApp> {
         title: 'SportsManagementApp',
         navigatorKey: navigatorKey,
         theme: ThemeData(brightness: Brightness.dark, buttonColor: Colors.teal),
-
         routes: {
           Routes.loading: (context) {
             return Scaffold(
